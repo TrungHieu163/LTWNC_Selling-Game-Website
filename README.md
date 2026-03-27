@@ -4,9 +4,9 @@
 Dự án website bán game sử dụng Laravel.
 
 ## Thành viên nhóm
-- Nguyễn Trung Hiếu
-- Nguyễn Trọng Phúc
-- Nguyễn Hữu Thành
+- Nguyễn Trung Hiếu: 23810310387
+- Nguyễn Trọng Phúc: 23810310391
+- Nguyễn Hữu Thành: 23810310389
 
 ## Tài liệu SRS
 

@@ -1,7 +1,7 @@
-# ĐỀ CƯƠNG: WEBSITE BÁN GAME
+# ĐỀ CƯƠNG: MIXIGAMING Shop
 
 ## 1. Giới thiệu
-Website bán game cho phép người dùng tìm kiếm, mua và tải game online.
+MIXIGAMING Shop bán game cho phép người dùng tìm kiếm, mua và tải game online.
 
 ---
 
@@ -35,3 +35,4 @@ Website bán game cho phép người dùng tìm kiếm, mua và tải game onlin
 - Gợi ý game
 - Wishlist
 - Review
+- Thanh toán online qua quét mã QR

@@ -29,6 +29,7 @@ class OrderController extends Controller
             ]);
 
             $total = 0;
+            $allKeys = [];
 
             foreach ($cart as $gameId => $qty) {
                 $game = Game::findOrFail($gameId);
@@ -55,13 +56,20 @@ class OrderController extends Controller
 
                 foreach ($keys as $key) {
                     $key->update(['is_sold' => true]);
-                    // Nếu muốn lưu key cụ thể vào order → tạo bảng pivot sau này
+
+                    $allKeys[] = [                 
+                        'game_name' => $game->name,
+                        'key_code'  => $key->key_code,
+                    ];
                 }
 
                 $total += $game->price * $qty;
             }
 
-            $order->update(['total_price' => $total]);
+            $order->update([
+                'total_price' => $total,
+                'status' => 'completed'
+            ]);
 
             // Xóa giỏ hàng
             session()->forget('cart');
@@ -70,9 +78,19 @@ class OrderController extends Controller
             $order->load(['items.game']);
 
             return response()->json([
-                'message' => 'Đặt hàng thành công!',
-                'order' => $order,
-                'total' => $total
+                'message' => 'Đặt hàng thành công! Dưới đây là mã kích hoạt game của bạn.',
+                'order_id' => $order->id,
+                'total' => $total,
+                'status' => 'completed',
+                'items' => $order->items->map(function ($item) {
+                    return [
+                        'game_name' => $item->game->name,
+                        'quantity' => $item->quantity,
+                        'price' => $item->price,
+                        'subtotal' => $item->price * $item->quantity,
+                    ];
+                }),
+                'keys' => $allKeys,
             ]);
         });
     }

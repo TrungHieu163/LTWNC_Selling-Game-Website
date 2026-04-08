@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('game_id')->constrained();
             $table->string('key_code');
             $table->boolean('is_sold')->default(false);
+            $table->timestamps();
         });
     }
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('game_id')->constrained();
             $table->integer('quantity');
             $table->decimal('price', 10, 2);
+            $table->timestamps();
         });
     }
 

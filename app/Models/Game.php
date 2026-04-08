@@ -28,4 +28,10 @@ class Game extends Model
     {
         return $this->hasMany(GameKey::class);
     }
+
+    // Helper: Lấy key chưa bán
+    public function availableKeys()
+    {
+        return $this->keys()->where('is_sold', false);
+    }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('key_code')->unique(); // Mã key để nạp game
             $table->boolean('is_sold')->default(false); // Đã bán hay chưa
             $table->timestamps();
-        });;
+        });
     }
 
     /**

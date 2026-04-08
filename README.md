@@ -1,5 +1,7 @@
 # 🎮 Website Kinh Doanh Trò Chơi Trực Tuyến - MIXIGaming Shop
 
+---
+
 ## 👥 Thành viên nhóm
 
 | STT | Họ và tên             | MSSV        | Vai trò dự kiến              |
@@ -7,6 +9,8 @@
 | 1   | **Nguyễn Trung Hiếu** | 23810310387 | Nhóm trưởng (Lead/Backend)   |
 | 2   | Nguyễn Trọng Phúc     | 23810310391 | Thành viên (Fullstack/Admin) |
 | 3   | Nguyễn Hữu Thành      | 23810310389 | Thành viên (Frontend/UI-UX)  |
+
+---
 
 ## 🚀 Công nghệ sử dụng
 
@@ -20,6 +24,8 @@
 | **Database**       | MySQL                                                      |
 | **Payment**        | **VNPay API** (Cổng thanh toán điện tử chính)              |
 
+---
+
 ## 📋 Tài liệu Đặc tả Yêu cầu Phần mềm (SRS)
 
 Tất cả tài liệu SRS được lưu trong thư mục `/docs/srs/`.
@@ -31,6 +37,8 @@ Tất cả tài liệu SRS được lưu trong thư mục `/docs/srs/`.
 | ORDER-01 | 📦 Đặt hàng & Thanh toán (VNPay)         | `SRS_ORDER.md` | Đang thực hiện |
 | ADMIN-01 | 🛡️ Quản trị hệ thống (Filament)          | `SRS_ADMIN.md` | Đang thực hiện |
 
+---
+
 ## 🗓️ Kế hoạch thực hiện (4 Tuần)
 
 | Tuần  | Mục tiêu chính            | **Hiếu (Lead/Backend)**                                                | **Phúc (Admin/Fullstack)**                                             | **Thành (Frontend/UI-UX)**                                            |
@@ -39,6 +47,8 @@ Tất cả tài liệu SRS được lưu trong thư mục `/docs/srs/`.
 | **2** | **Admin & Hiển thị**      | Xử lý logic Giỏ hàng, xây dựng chức năng Tìm kiếm & Lọc sản phẩm.      | Xây dựng Filament Resources (Game, Category). Quản lý kho Key game.    | Code giao diện Trang chủ, Trang danh sách game & Chi tiết game.       |
 | **3** | **Thanh toán & Đơn hàng** | Tích hợp **VNPay API**. Xử lý logic trừ kho Key và gửi Email xác nhận. | Tạo OrderResource quản lý đơn hàng. Thiết lập Dashboard Widgets.       | Làm giao diện Giỏ hàng, Checkout & Trang lịch sử mua hàng cá nhân.    |
 | **4** | **Tối ưu & Hoàn thiện**   | Xử lý Login Social, tối ưu bảo mật SQL Injection & hiệu năng DB.       | Kiểm tra phân quyền Spatie. Xử lý logic hoàn tiền/khóa tài khoản.      | Tối ưu Responsive (Mobile). Làm trang Tin tức/Review (Filament Blog). |
+
+---
 
 ## 🗂️ Cấu trúc thư mục dự án
 
@@ -61,6 +71,8 @@ game-store/
 ├── .env.example            # File mẫu cấu hình môi trường
 └── README.md
 ```
+
+---
 
 ## ⚙️ Hướng dẫn cài đặt
 
@@ -87,6 +99,8 @@ php artisan serve
 
 - **Giao diện người dùng:** `http://localhost:8000`
 - **Trang quản trị (Admin):** `http://localhost:8000/admin`
+
+---
 
 ## 📝 Ghi chú
 

@@ -1,9 +1,5 @@
 # 🎮 Website Kinh Doanh Trò Chơi Trực Tuyến - MIXIGaming Shop
 
-**Đề tài thực tập tốt nghiệp — Lớp LTWNC-D18CNPM2**
-
-Hệ thống website thương mại điện tử chuyên biệt cho Game. Sử dụng **Laravel Ecosystem** để đảm bảo tính bảo mật, tốc độ phát triển nhanh và khả năng quản trị mạnh mẽ cho cả người dùng và quản trị viên.
-
 ## 👥 Thành viên nhóm
 
 | STT | Họ và tên             | MSSV        | Vai trò dự kiến              |
@@ -70,7 +66,7 @@ game-store/
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/<username>/game-store.git
+git clone https://github.com/TrungHieu163/LTWNC_Selling-Game-Website.git
 cd game-store
 
 # 2. Cài đặt các thư viện PHP và JS

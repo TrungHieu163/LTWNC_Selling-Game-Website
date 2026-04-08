@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('game_keys', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('price', 10, 2);
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
-            $table->foreignId('category_id')->constrained();
+            $table->foreignId('game_id')->constrained()->onDelete('cascade'); // Key này thuộc game nào
+            $table->string('key_code')->unique(); // Mã key để nạp game
+            $table->boolean('is_sold')->default(false); // Đã bán hay chưa
             $table->timestamps();
-        });
+        });;
     }
 
     /**

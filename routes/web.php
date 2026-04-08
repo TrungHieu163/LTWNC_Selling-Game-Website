@@ -26,6 +26,7 @@ Route::get('/games/{id}', [GameController::class, 'show']);
 Route::get('/cart', [CartController::class, 'index']);
 Route::get('/cart/add/{id}', [CartController::class, 'add']);
 
-Route::post('/checkout', [OrderController::class, 'checkout']);
+Route::post('/checkout', [OrderController::class, 'checkout'])
+    ->middleware('auth');
 
 require __DIR__.'/auth.php';

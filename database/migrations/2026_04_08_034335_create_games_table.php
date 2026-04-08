@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained();
             $table->string('name');
-            $table->decimal('price', 10, 2);
+            $table->string('slug')->unique();
+            $table->decimal('price', 15, 2);
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->foreignId('category_id')->constrained();
             $table->timestamps();
         });
     }

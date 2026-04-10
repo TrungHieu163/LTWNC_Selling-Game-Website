@@ -56,6 +56,7 @@
     <div class="flex-1 flex items-center justify-center w-full">
         <!-- Nội dung của bạn sẽ nằm ở đây -->
     </div>
+    @include('layouts.footer')
 
 </body>
 

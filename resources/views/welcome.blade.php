@@ -17,11 +17,13 @@
 
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 
 <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] min-h-screen flex flex-col">
 
-    <!-- Navigation Bar - Đã thay màu giống ảnh -->
+    <!-- Navigation Bar -->
     <nav class="bg-[#1e2937] border-b border-gray-700">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -52,10 +54,12 @@
         </div>
     </nav>
 
-    <!-- Phần nội dung chính -->
-    <div class="flex-1 flex items-center justify-center w-full">
-        <!-- Nội dung của bạn sẽ nằm ở đây -->
+    <!-- Phần nội dung chính - Gọi trangchu.blade.php -->
+    <div class="flex-1 w-full">
+        @include('trangchu')
     </div>
+
+    <!-- Footer -->
     @include('layouts.footer')
 
 </body>

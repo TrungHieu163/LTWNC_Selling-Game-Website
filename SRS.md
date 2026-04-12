@@ -7,7 +7,7 @@
 
 **Mã chức năng:** AUTH-01  
 **Trạng thái:** Draft  
-**Người soạn:** Nguyễn Trọng Phúc, Nguyễn Hữu ThànhThành, Nguyễn Trung Hiếu
+**Người soạn:** Nguyễn Trọng Phúc, Nguyễn Hữu Thành, Nguyễn Trung Hiếu
 
 ---
 

@@ -28,14 +28,20 @@
 
 ## 📋 Tài liệu Đặc tả Yêu cầu Phần mềm (SRS)
 
-Tất cả tài liệu SRS được lưu trong thư mục `/docs/srs/`.
+Tất cả tài liệu SRS được lưu trong tập tin `SRS.md`.
 
-| Mã       | Chức năng                                | Tài liệu       | Trạng thái     |
-| :------- | :--------------------------------------- | :------------- | :------------- |
-| AUTH-01  | 🔐 Xác thực & Phân quyền (Breeze/Spatie) | `SRS_LOGIN.md` | Đang thực hiện |
-| CART-01  | 🛒 Quản lý Giỏ hàng                      | `SRS_CART.md`  | Đang thực hiện |
-| ORDER-01 | 📦 Đặt hàng & Thanh toán (VNPay)         | `SRS_ORDER.md` | Đang thực hiện |
-| ADMIN-01 | 🛡️ Quản trị hệ thống (Filament)          | `SRS_ADMIN.md` | Đang thực hiện |
+| Mã | Tên Chức Năng | Tài Liệu | Trạng Thái |
+| :--- | :--- | :--- | :--- |
+| AUTH-01 | Xác thực & Phân quyền | SRS.md | Đang thực hiện |
+| AUTH-02 | Đăng ký tài khoản | SRS.md | Đang thực hiện |
+| GAME-01 | Xem danh sách game | SRS.md | Đang thực hiện |
+| GAME-02 | Tìm kiếm game | SRS.md | Đang thực hiện |
+| CART-01 | Quản lý giỏ hàng | SRS.md | Đang thực hiện |
+| ORDER-01 | Đặt hàng & Thanh toán | SRS.md | Đang thực hiện |
+| USER-01 | Quản lý tài khoản cá nhân | SRS.md | Đang thực hiện |
+| ADMIN-01 | Quản trị người dùng | SRS.md | Đang thực hiện |
+| ADMIN-02 | Quản trị hệ thống Game | SRS.md | Đang thực hiện |
+| ADMIN-03 | Thống kê & Báo cáo | SRS.md | Đang thực hiện |
 
 ---
 
@@ -79,7 +85,7 @@ game-store/
 ```bash
 # 1. Clone repository
 git clone https://github.com/TrungHieu163/LTWNC_Selling-Game-Website.git
-cd game-store
+cd LTWNC_Selling-Game-Website
 
 # 2. Cài đặt các thư viện PHP và JS
 composer install
@@ -105,7 +111,7 @@ php artisan serve
 ## 📝 Ghi chú
 
 - **Bảo mật:** Hệ thống sử dụng Middleware của Spatie để chặn các truy cập trái phép vào vùng Admin.
-- **Quản lý:** Mọi thay đổi về Database hoặc Logic nghiệp vụ cần cập nhật lại tài liệu SRS tương ứng trong thư mục `/docs/`.
+- **Quản lý:** Mọi thay đổi về Database hoặc Logic nghiệp vụ cần cập nhật lại tài liệu SRS tương ứng trong tập tin `SRS.md`.
 - **Hỗ trợ:** Liên hệ nhóm trưởng **Nguyễn Trung Hiếu** nếu gặp vấn đề khi cài đặt hoặc xung đột code.
 
 ---

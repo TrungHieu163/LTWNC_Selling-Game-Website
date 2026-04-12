@@ -78,20 +78,45 @@ class OrderController extends Controller
             $order->load(['items.game']);
 
             return response()->json([
+                'success' => true,
                 'message' => 'Đặt hàng thành công! Dưới đây là mã kích hoạt game của bạn.',
                 'order_id' => $order->id,
-                'total' => $total,
-                'status' => 'completed',
+                'total'    => $total,
+                'status'   => 'completed',
                 'items' => $order->items->map(function ($item) {
                     return [
                         'game_name' => $item->game->name,
-                        'quantity' => $item->quantity,
-                        'price' => $item->price,
-                        'subtotal' => $item->price * $item->quantity,
+                        'quantity'  => $item->quantity,
+                        'price'     => $item->price,
+                        'subtotal'  => $item->price * $item->quantity,
                     ];
                 }),
                 'keys' => $allKeys,
             ]);
         });
+    }
+
+    public function myOrders()
+    {
+        $orders = Order::where('user_id', auth()->id())
+                       ->with(['items.game'])           // load game trong items
+                       ->latest()
+                       ->paginate(10);
+
+        return response()->json($orders);
+    }
+
+    //Xem chi tiết một đơn hàng + keys
+    public function showOrder($id)
+    {
+        $order = Order::where('user_id', auth()->id())
+                      ->with(['items.game'])
+                      ->findOrFail($id);
+
+        if ($order->status === 'completed') {
+            $order->load('items');
+        }
+
+        return response()->json($order);
     }
 }

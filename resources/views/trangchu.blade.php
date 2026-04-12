@@ -103,6 +103,97 @@
             </div>
         </div>
 
+        <div class="mt-20">
+
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-white text-2xl font-bold">Sắp ra mắt</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-4 bg-[#1a1a1a]">
+                        <img src="/images/gta6.jpeg" alt="Game Name"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="flex flex-col">
+                        <h3
+                            class="text-white font-semibold text-base mb-1 line-clamp-1 group-hover:text-gray-300 transition">
+                            Grand Theft Auto VI
+                        </h3>
+                        <p class="text-gray-500 text-sm font-medium">
+                            Ra mắt: 19/11/2026
+                        </p>
+                    </div>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-4 bg-[#1a1a1a]">
+                        <img src="/images/hw2.png" alt="Game Name"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="flex flex-col">
+                        <h3
+                            class="text-white font-semibold text-base mb-1 line-clamp-1 group-hover:text-gray-300 transition">
+                            Hogwarts Legacy 2
+                        </h3>
+                        <p class="text-gray-500 text-sm font-medium">
+                            Ra mắt: đâu đó trong năm 2027
+                        </p>
+                    </div>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-4 bg-[#1a1a1a]">
+                        <img src="/images/mw.jpg" alt="Game Name"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="flex flex-col">
+                        <h3
+                            class="text-white font-semibold text-base mb-1 line-clamp-1 group-hover:text-gray-300 transition">
+                            Marvel Wolverine
+                        </h3>
+                        <p class="text-gray-500 text-sm font-medium">
+                            Ra mắt: 15/09/2026
+                        </p>
+                    </div>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-4 bg-[#1a1a1a]">
+                        <img src="/images/halo.png" alt="Game Name"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="flex flex-col">
+                        <h3
+                            class="text-white font-semibold text-base mb-1 line-clamp-1 group-hover:text-gray-300 transition">
+                            Halo: Campaign Evolved
+                        </h3>
+                        <p class="text-gray-500 text-sm font-medium">
+                            Ra mắt: 28/06/2026
+                        </p>
+                    </div>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-4 bg-[#1a1a1a]">
+                        <img src="/images/batman.jpg" alt="Game Name"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="flex flex-col">
+                        <h3
+                            class="text-white font-semibold text-base mb-1 line-clamp-1 group-hover:text-gray-300 transition">
+                            LEGO Batman Legacy of The Dark Knight
+                        </h3>
+                        <p class="text-gray-500 text-sm font-medium">
+                            Ra mắt: 23/05/2026
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <!-- ==================== TRÒ CHƠI MIỄN PHÍ ==================== -->
         <div class="mt-20">
             <div class="bg-[#1a1a1a] rounded-3xl p-8 pb-10">
@@ -158,14 +249,15 @@
 
             </div>
         </div>
-        <div class="mt-20 bg-transparent"> <a href="#" class="inline-flex items-center gap-2 mb-8 text-white group">
+        <div class="mt-20 bg-transparent">
+            <a href="{{ route('news.index') }}" class="inline-flex items-center gap-2 mb-8 text-white group">
                 <h2 class="text-2xl font-bold group-hover:text-gray-400 transition">Tin tức nổi bật</h2>
                 <span class="text-2xl text-gray-500 group-hover:text-white transition">›</span>
             </a>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-                <a href="#" class="group block">
+                <a href="{{ route('news.show') }}" class="group block">
                     <div class="relative overflow-hidden rounded-2xl aspect-video mb-5 bg-[#1a1a1a]">
                         <img src="/images/news_1.jpg"
                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
@@ -183,13 +275,13 @@
                         </p>
 
                         <span
-                            class="text-white text-sm font-bold border-b-2 border-transparent hover:border-white transition-all pb-1 uppercase tracking-wider w-fit mt-4">
+                            class="text-white text-sm font-bold border-b-2 border-transparent group-hover:border-white transition-all pb-1 uppercase tracking-wider w-fit mt-4">
                             Đọc thêm
                         </span>
                     </div>
                 </a>
 
-                <a href="#" class="group block">
+                <a href="{{ route('news.show') }}" class="group block">
                     <div class="relative overflow-hidden rounded-2xl aspect-video mb-5 bg-[#1a1a1a]">
                         <img src="/images/news_2.jpg"
                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
@@ -201,16 +293,16 @@
                         </h3>
                         <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 min-h-[4.5rem]">
                             At Fate's End kết hợp lối chơi phiêu lưu trỏ và nhấp cùng hành động trong một cuộc ân oán
-                            gia tộc với những hệ quả có thể thay đổi cả thế giới.
+                            gia tộc.
                         </p>
                         <span
-                            class="text-white text-sm font-bold border-b-2 border-transparent hover:border-white transition-all pb-1 uppercase tracking-wider w-fit mt-4">
+                            class="text-white text-sm font-bold border-b-2 border-transparent group-hover:border-white transition-all pb-1 uppercase tracking-wider w-fit mt-4">
                             Đọc thêm
                         </span>
                     </div>
                 </a>
 
-                <a href="#" class="group block">
+                <a href="{{ route('news.show') }}" class="group block">
                     <div class="relative overflow-hidden rounded-2xl aspect-video mb-5 bg-[#1a1a1a]">
                         <img src="/images/news_3.jpg"
                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
@@ -224,7 +316,7 @@
                             Tham gia nguồn dữ liệu độc quyền, tính năng, phỏng vấn và hướng dẫn của chúng tôi.
                         </p>
                         <span
-                            class="text-white text-sm font-bold border-b-2 border-transparent hover:border-white transition-all pb-1 uppercase tracking-wider w-fit mt-4">
+                            class="text-white text-sm font-bold border-b-2 border-transparent group-hover:border-white transition-all pb-1 uppercase tracking-wider w-fit mt-4">
                             Đọc thêm
                         </span>
                     </div>
@@ -232,7 +324,6 @@
 
             </div>
         </div>
-
         <div class="mt-20 flex flex-col md:flex-row items-center gap-10 py-10">
 
             <div class="w-full md:w-[65%]">
@@ -261,42 +352,37 @@
         </div>
 
     </div>
-</div>
-</div>
-</div>
 
-</div>
-</div>
 
-<style>
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-}
+    <style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 10px;
-}
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #444;
+        border-radius: 10px;
+    }
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-}
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
 
-/* Tinh chỉnh thanh cuộn như cũ */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-}
+    /* Tinh chỉnh thanh cuộn như cũ */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 10px;
-}
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #444;
+        border-radius: 10px;
+    }
 
-h2,
-h3 {
-    letter-spacing: -0.02em;
-}
-</style>
+    h2,
+    h3 {
+        letter-spacing: -0.02em;
+    }
+    </style>

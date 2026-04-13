@@ -56,10 +56,13 @@ class OrderController extends Controller
 
                 foreach ($keys as $key) {
                     $key->update(['is_sold' => true]);
+                    
+                    $order->gameKeys()->attach($key->id);
 
                     $allKeys[] = [                 
                         'game_name' => $game->name,
                         'key_code'  => $key->key_code,
+                        'key_id'    => $key->id
                     ];
                 }
 
@@ -78,10 +81,37 @@ class OrderController extends Controller
             $order->load(['items.game']);
 
             return response()->json([
+                'success' => true,
                 'message' => 'Đặt hàng thành công! Dưới đây là mã kích hoạt game của bạn.',
                 'order_id' => $order->id,
-                'total' => $total,
-                'status' => 'completed',
+                'total'    => $total,
+                'status'   => 'completed',
+                'items' => $order->items->map(function ($item) {
+                    return [
+                        'game_name' => $item->game->name,
+                        'quantity'  => $item->quantity,
+                        'price'     => $item->price,
+                        'subtotal'  => $item->price * $item->quantity,
+                    ];
+                }),
+                'keys' => $allKeys,
+            ]);
+        });
+    }
+
+    public function myOrders()
+    {
+        $orders = Order::where('user_id', auth()->id())
+                       ->with(['items.game', 'gameKeys.game'])
+                       ->latest()
+                       ->paginate(10);
+
+        $orders->getCollection()->transform(function ($order) {
+            return [
+                'id' => $order->id,
+                'total_price' => $order->total_price,
+                'status' => $order->status,
+                'created_at' => $order->created_at->format('d/m/Y H:i'),
                 'items' => $order->items->map(function ($item) {
                     return [
                         'game_name' => $item->game->name,
@@ -90,8 +120,46 @@ class OrderController extends Controller
                         'subtotal' => $item->price * $item->quantity,
                     ];
                 }),
-                'keys' => $allKeys,
-            ]);
+                'keys' => $order->gameKeys->map(function ($key) {
+                return [
+                    'game_name' => $key->game ? $key->game->name : 'Unknown Game',
+                    'key_code'  => $key->key_code,
+                ];
+            })
+            ];
         });
+
+        return response()->json($orders);
     }
+
+    //Xem chi tiết một đơn hàng
+    public function showOrder($id)
+{
+    $order = Order::where('user_id', auth()->id())
+                  ->with(['items.game', 'gameKeys.game'])
+                  ->findOrFail($id);
+
+    return response()->json([
+        'id'          => $order->id,
+        'total_price' => $order->total_price,
+        'status'      => $order->status,
+        'created_at'  => $order->created_at->format('d/m/Y H:i'),
+        
+        'items' => $order->items->map(function ($item) {
+            return [
+                'game_name' => $item->game->name,
+                'quantity'  => $item->quantity,
+                'price'     => $item->price,
+                'subtotal'  => $item->price * $item->quantity,
+            ];
+        }),
+
+        'keys' => $order->gameKeys->map(function ($key) {
+            return [
+                'game_name' => optional($key->game)->name ?? 'Unknown Game',
+                'key_code'  => $key->key_code,
+            ];
+        }),
+    ]);
+}
 }

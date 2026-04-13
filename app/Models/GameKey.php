@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GameKey extends Model
 {
@@ -15,5 +17,10 @@ class GameKey extends Model
     public function game(): BelongsTo
     {
         return $this->belongsTo(Game::class);
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_game_keys');
     }
 }

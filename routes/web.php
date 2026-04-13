@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cart', [CartController::class, 'index']);
     Route::get('/cart/add/{id}', [CartController::class, 'add']);
     Route::post('/checkout', [OrderController::class, 'checkout']);
+    Route::get('/my-orders', [OrderController::class, 'myOrders']);
+    Route::get('/my-orders/{id}', [OrderController::class, 'showOrder']);
 });
 
 

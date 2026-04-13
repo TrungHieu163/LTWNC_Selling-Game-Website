@@ -40,6 +40,10 @@
                         <a href="https://github.com/phuc3015-bit" target="_blank"
                             class="hover:text-white transition">Nguyễn Trọng Phúc</a>
                     </li>
+                    <li>
+                        <a href="https://youtu.be/dQw4w9WgXcQ?si=zUkgTTUjddMwW0kl" target="_blank"
+                            class="hover:text-white transition">About Us</a>
+                    </li>
                 </ul>
             </div>
 

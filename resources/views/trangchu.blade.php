@@ -1,6 +1,5 @@
 <div class="w-full bg-[#121212] py-12">
 
-    <!-- Container chính với width 80% -->
     <div class="max-w-[80%] mx-auto px-6" style="width: 80%;">
 
         <!-- ==================== BANNER CHÍNH ==================== -->
@@ -355,34 +354,34 @@
 
 
     <style>
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 4px;
-    }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #444;
-        border-radius: 10px;
-    }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 10px;
+        }
 
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
-    body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-    }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
 
-    /* Tinh chỉnh thanh cuộn như cũ */
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 4px;
-    }
+        /* Tinh chỉnh thanh cuộn như cũ */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #444;
-        border-radius: 10px;
-    }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 10px;
+        }
 
-    h2,
-    h3 {
-        letter-spacing: -0.02em;
-    }
+        h2,
+        h3 {
+            letter-spacing: -0.02em;
+        }
     </style>

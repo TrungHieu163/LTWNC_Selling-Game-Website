@@ -103,19 +103,32 @@ class OrderController extends Controller
                        ->latest()
                        ->paginate(10);
 
+        $orders->getCollection()->transform(function ($order) {
+            return [
+                'id' => $order->id,
+                'total_price' => $order->total_price,
+                'status' => $order->status,
+                'created_at' => $order->created_at->format('d/m/Y H:i'),
+                'items' => $order->items->map(function ($item) {
+                    return [
+                        'game_name' => $item->game->name,
+                        'quantity' => $item->quantity,
+                        'price' => $item->price,
+                        'subtotal' => $item->price * $item->quantity,
+                    ];
+                }),
+            ];
+        });
+
         return response()->json($orders);
     }
 
-    //Xem chi tiết một đơn hàng + keys
+    //Xem chi tiết một đơn hàng
     public function showOrder($id)
     {
         $order = Order::where('user_id', auth()->id())
                       ->with(['items.game'])
                       ->findOrFail($id);
-
-        if ($order->status === 'completed') {
-            $order->load('items');
-        }
 
         return response()->json($order);
     }

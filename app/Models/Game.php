@@ -14,6 +14,7 @@ class Game extends Model
         'price',
         'description',
         'image',
+        'trailer_url',
         'category_id',
     ];
 

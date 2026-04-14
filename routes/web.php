@@ -22,6 +22,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     return view('dashboard');
     })->name('dashboard');
 
+    Route::get('/search', function () {
+        return view('search');
+    })->name('search');
+
+
+    Route::get('/giohang', function () {
+        return view('giohang');
+    })->name('giohang');
+
+    Route::get('/libary', function () {
+        return view('libary');
+    })->name('libary');
 
     Route::get('/tin-tuc', function () {
         return view('news.index');
@@ -53,5 +65,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 // Route::get('/games', [GameController::class, 'index']);
 // Route::get('/games/{id}', [GameController::class, 'show']);
+Route::get('/games', [GameController::class, 'index']);
 
 require __DIR__ . '/auth.php';

@@ -24,9 +24,14 @@
                         {{ __('Tin tức') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('library')">
+                    <x-nav-link :href="route('libary')" :active="request()->routeIs('libary')">
                         {{ __('Thư viện cá nhân') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('giohang')" :active="request()->routeIs('giohang')">
+                        {{ __('Giỏ hàng') }}
+                    </x-nav-link>
+
                 </div>
             </div>
 

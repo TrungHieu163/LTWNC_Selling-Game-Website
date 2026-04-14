@@ -51,11 +51,9 @@ class User extends Authenticatable implements FilamentUser // Quan trọng: Thê
     /**
      * Quyết định ai được phép vào trang Admin
      */
-    public function canAccessPanel(Panel $panel): bool
+    public function canAccessPanel(\Filament\Panel $panel): bool
     {
-        // Hiện tại cho phép tất cả để bạn đăng nhập thử.
-        // Sau khi tạo xong Role 'admin', bạn nên đổi thành: return $this->hasRole('admin');
-        //return true; 
-        return $this->hasRole('admin');
+        // Cấp quyền vào Dashboard cho Admin tổng HOẶC người có role admin
+        return $this->email === 'admin@gmail.com' || $this->hasRole('admin');
     }
 }

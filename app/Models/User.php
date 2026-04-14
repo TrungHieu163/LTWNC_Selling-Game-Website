@@ -55,6 +55,7 @@ class User extends Authenticatable implements FilamentUser // Quan trọng: Thê
     {
         // Hiện tại cho phép tất cả để bạn đăng nhập thử.
         // Sau khi tạo xong Role 'admin', bạn nên đổi thành: return $this->hasRole('admin');
-        return true; 
+        //return true; 
+        return $this->hasRole('admin');
     }
 }

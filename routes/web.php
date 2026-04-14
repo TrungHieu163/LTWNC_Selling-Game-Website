@@ -13,7 +13,13 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', function () {
-        return view('dashboard');
+    // Nếu User có quyền admin, đẩy thẳng vào Filament Dashboard
+    if (auth()->user()->hasRole('admin')) {
+        return redirect()->intended('/admin');
+    }
+    
+    // Nếu là User thường, cho xem trang dashboard bình thường
+    return view('dashboard');
     })->name('dashboard');
 
 
@@ -37,10 +43,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/checkout', [OrderController::class, 'checkout']);
     Route::get('/my-orders', [OrderController::class, 'myOrders']);
     Route::get('/my-orders/{id}', [OrderController::class, 'showOrder']);
+
+
 });
 
 
-Route::get('/games', [GameController::class, 'index']);
-Route::get('/games/{id}', [GameController::class, 'show']);
+    Route::get('/games', function () {
+        return view('games');
+    });
+// Route::get('/games', [GameController::class, 'index']);
+// Route::get('/games/{id}', [GameController::class, 'show']);
 
 require __DIR__ . '/auth.php';

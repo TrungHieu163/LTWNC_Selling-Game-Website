@@ -11,39 +11,33 @@ class GameSeeder extends Seeder
 {
     public function run()
     {
-        $action = Category::create([
-            'name' => 'Action'
-        ]);
-
-        $sport = Category::create([
-            'name' => 'Sport'
-        ]);
+        $action = Category::firstOrCreate(['name' => 'Action']);
+        $sport = Category::firstOrCreate(['name' => 'Sport']);
+        $adventure = Category::firstOrCreate(['name' => 'Adventure']);
+        $rpg = Category::firstOrCreate(['name' => 'RPG']);
 
         Game::create([
             'name' => 'GTA V',
             'slug' => Str::slug('GTA V'),
             'price' => 500000,
             'description' => 'Siêu phẩm hành động thế giới mở.',
-            'category_id' => $action->id,
             'image' => null
-        ]);
+        ])->categories()->attach([$action->id, $adventure->id]);
 
         Game::create([
             'name' => 'FIFA 24',
             'slug' => Str::slug('FIFA 24'),
             'price' => 700000,
             'description' => 'Game bóng đá đỉnh cao từ EA Sports.',
-            'category_id' => $sport->id,
             'image' => null
-        ]);
+        ])->categories()->attach([$sport->id]);
 
         Game::create([
             'name' => 'Elden Ring',
             'slug' => Str::slug('Elden Ring'),
             'price' => 1200000,
             'description' => 'Game nhập vai hành động khó nhất năm.',
-            'category_id' => $action->id,
             'image' => null
-        ]);
+        ])->categories()->attach([$rpg->id, $adventure->id]);
     }
 }

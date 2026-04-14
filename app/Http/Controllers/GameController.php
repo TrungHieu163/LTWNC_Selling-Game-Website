@@ -10,7 +10,7 @@ class GameController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Game::with('category');
+        $query = Game::with('categories');
 
         // Tìm kiếm theo tên game
         if ($request->filled('search')) {
@@ -19,16 +19,40 @@ class GameController extends Controller
 
         // Lọc theo danh mục
         if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
+        $query->whereHas('categories', function ($q) use ($request) {
+            $q->where('categories.id', $request->category_id);
+        });
+    }
 
         // Phân trang (12 game/trang)
         $games = $query->latest()->paginate(12);
-
+        $games->getCollection()->transform(function ($game) {
+            return [
+                'id'          => $game->id,
+                'name'        => $game->name,
+                'slug'        => $game->slug,
+                'price'       => (float) $game->price,
+                'description' => $game->description,
+                'image'       => $game->image,
+                'trailer_url' => $game->trailer_url,
+                'categories'  => $game->categories->pluck('name'),   // Chỉ lấy tên category
+            ];
+        });
         return response()->json($games);
     }
 
     public function show($id) {
-        return Game::with('category')->findOrFail($id);
+        $game = Game::with('categories')->findOrFail($id);
+        
+        return response()->json([
+            'id'          => $game->id,
+            'name'        => $game->name,
+            'slug'        => $game->slug,
+            'price'       => (float) $game->price,
+            'description' => $game->description,
+            'image'       => $game->image,
+            'trailer_url' => $game->trailer_url,
+            'categories'  => $game->categories->pluck('name'),
+        ]);
     }
 }

@@ -16,6 +16,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    Route::get('/search', function () {
+        return view('search');
+    })->name('search');
 
     Route::get('/tin-tuc', function () {
         return view('news.index');
@@ -41,7 +44,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::get('/games', [GameController::class, 'index']);
-Route::get('/games/{id}', [GameController::class, 'show']);
 
 Route::get('/games', function () {
     return view('games');

@@ -134,32 +134,51 @@ class OrderController extends Controller
 
     //Xem chi tiết một đơn hàng
     public function showOrder($id)
-{
-    $order = Order::where('user_id', auth()->id())
-                  ->with(['items.game', 'gameKeys.game'])
-                  ->findOrFail($id);
+    {
+        $order = Order::where('user_id', auth()->id())
+                    ->with(['items.game', 'gameKeys.game'])
+                    ->findOrFail($id);
 
-    return response()->json([
-        'id'          => $order->id,
-        'total_price' => $order->total_price,
-        'status'      => $order->status,
-        'created_at'  => $order->created_at->format('d/m/Y H:i'),
-        
-        'items' => $order->items->map(function ($item) {
-            return [
-                'game_name' => $item->game->name,
-                'quantity'  => $item->quantity,
-                'price'     => $item->price,
-                'subtotal'  => $item->price * $item->quantity,
-            ];
-        }),
+        return response()->json([
+            'id'          => $order->id,
+            'total_price' => $order->total_price,
+            'status'      => $order->status,
+            'created_at'  => $order->created_at->format('d/m/Y H:i'),
+            
+            'items' => $order->items->map(function ($item) {
+                return [
+                    'game_name' => $item->game->name,
+                    'quantity'  => $item->quantity,
+                    'price'     => $item->price,
+                    'subtotal'  => $item->price * $item->quantity,
+                ];
+            }),
 
-        'keys' => $order->gameKeys->map(function ($key) {
-            return [
-                'game_name' => optional($key->game)->name ?? 'Unknown Game',
-                'key_code'  => $key->key_code,
-            ];
-        }),
-    ]);
-}
+            'keys' => $order->gameKeys->map(function ($key) {
+                return [
+                    'game_name' => optional($key->game)->name ?? 'Unknown Game',
+                    'key_code'  => $key->key_code,
+                ];
+            }),
+        ]);
+    }
+
+    public function myOrdersView()
+    {
+        $orders = Order::where('user_id', auth()->id())
+                       ->with(['items.game', 'gameKeys.game'])
+                       ->latest()
+                       ->paginate(10);
+
+        return view('orders.index', compact('orders'));
+    }
+
+    public function showOrderView($id)
+    {
+        $order = Order::where('user_id', auth()->id())
+                      ->with(['items.game', 'gameKeys.game'])
+                      ->findOrFail($id);
+
+        return view('orders.show', compact('order'));
+    }
 }

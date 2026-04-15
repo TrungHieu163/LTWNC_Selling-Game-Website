@@ -35,12 +35,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cart', [CartController::class, 'index']);
     Route::get('/cart/add/{id}', [CartController::class, 'add']);
     Route::post('/checkout', [OrderController::class, 'checkout']);
-    Route::get('/my-orders', [OrderController::class, 'myOrders']);
-    Route::get('/my-orders/{id}', [OrderController::class, 'showOrder']);
+    Route::get('/api/my-orders', [OrderController::class, 'myOrders']);
+    Route::get('/api/my-orders/{id}', [OrderController::class, 'showOrder']);
+
+    Route::get('/my-orders', [OrderController::class, 'myOrdersView'])->name('orders.index');
+    Route::get('/my-orders/{id}', [OrderController::class, 'showOrderView'])->name('orders.show');
 });
 
 
-Route::get('/games', [GameController::class, 'index']);
-Route::get('/games/{id}', [GameController::class, 'show']);
+Route::get('/api/games', [GameController::class, 'index']);
+Route::get('/api/games/{id}', [GameController::class, 'show']);
+
+Route::get('/games', [GameController::class, 'indexView'])->name('home');
+Route::get('/games/{id}', [GameController::class, 'showView'])->name('games.show');
 
 require __DIR__ . '/auth.php';

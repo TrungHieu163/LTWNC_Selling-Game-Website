@@ -55,4 +55,16 @@ class GameController extends Controller
             'categories'  => $game->categories->pluck('name'),
         ]);
     }
+    // === TRẢ VỀ VIEW CHO BLADE ===
+    public function indexView()
+    {
+        $games = Game::with('categories')->latest()->paginate(12);
+        return view('trangchu', compact('games'));
+    }
+
+    public function showView($id)
+    {
+        $game = Game::with('categories')->findOrFail($id);
+        return view('games', compact('game'));
+    }
 }

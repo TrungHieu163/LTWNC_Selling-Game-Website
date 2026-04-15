@@ -16,6 +16,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    Route::get('/search', function () {
+        return view('search');
+    })->name('search');
+
+
+    Route::get('/giohang', function () {
+        return view('giohang');
+    })->name('giohang');
+
+    Route::get('/libary', function () {
+        return view('libary');
+    })->name('libary');
 
     Route::get('/tin-tuc', function () {
         return view('news.index');

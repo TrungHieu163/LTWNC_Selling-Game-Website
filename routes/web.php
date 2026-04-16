@@ -20,9 +20,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('search');
     })->name('search');
 
-
-    Route::get('/giohang', [CartController::class, 'index'])->name('giohang');
-
     Route::get('/tin-tuc', function () {
         return view('news.index');
     })->name('news.index');
@@ -31,6 +28,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/tin-tuc/chi-tiet', function () {
         return view('news.show');
     })->name('news.show');
+
+    Route::get('/giohang', function () {
+        return view('giohang');
+    })->name('giohang');
+
+    Route::get('/inventory', function () {
+        return view('inventory');
+    })->name('inventory');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

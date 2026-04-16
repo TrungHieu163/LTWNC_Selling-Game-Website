@@ -16,6 +16,10 @@
                         {{ __('Trang chủ') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('inventory')" :active="request()->routeIs('inventory')">
+                        {{ __('Kho game') }}
+                    </x-nav-link>
+
                     <x-nav-link :href="route('search')" :active="request()->routeIs('search')">
                         {{ __('Tìm kiếm') }}
                     </x-nav-link>

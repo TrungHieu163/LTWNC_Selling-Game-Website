@@ -30,6 +30,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('news.show');
     })->name('news.show');
 
+    Route::get('/giohang', function () {
+        return view('giohang');
+    })->name('giohang');
+
+    Route::get('/inventory', function () {
+        return view('inventory');
+    })->name('inventory');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

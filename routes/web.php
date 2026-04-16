@@ -16,10 +16,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/search', function () {
-        return view('search');
-    })->name('search');
-
+    Route::get('/search', [GameController::class, 'searchView'])->name('search');
+    Route::get('/api/search-suggestions', [GameController::class, 'suggestions'])->name('api.search.suggestions');
 
     Route::get('/giohang', [CartController::class, 'index'])->name('giohang');
 
@@ -40,13 +38,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
     Route::get('/api/my-orders', [OrderController::class, 'myOrders']);
     Route::get('/api/my-orders/{id}', [OrderController::class, 'showOrder']);
 
     Route::get('/my-orders/{id}', [OrderController::class, 'showOrderView'])->name('orders.show');
 
-    Route::get('/libary', [OrderController::class, 'myOrdersView'])->name('libary');
+    Route::get('/library', [OrderController::class, 'myLibraryView'])->name('library');
 });
 
 

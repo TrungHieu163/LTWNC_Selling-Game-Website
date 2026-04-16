@@ -167,23 +167,29 @@ class OrderController extends Controller
         ]);
     }
 
-    public function myOrdersView()
+    /**
+     * Hiển thị Thư viện game đã mua (mỗi game chỉ hiển thị một lần)
+     */
+    public function myLibraryView()
     {
-        $orders = Order::where('user_id', auth()->id())
-                       ->with(['items.game', 'gameKeys.game'])
-                       ->latest()
-                       ->paginate(12);
+        $libraryItems = OrderItem::whereHas('order', function ($query) {
+                $query->where('user_id', auth()->id())
+                    ->where('status', 'completed');
+            })
+            ->with(['game.categories', 'order'])   // load thêm categories nếu cần
+            ->latest('created_at')                 // sắp xếp theo thời gian mua
+            ->get()
+            ->unique('game_id')                    // loại bỏ game trùng
+            ->values();                            // reset key array
 
-        // Đảm bảo không lỗi nếu description null
-        $orders->getCollection()->each(function ($order) {
-            $order->items->each(function ($item) {
-                if (is_null($item->game->description)) {
-                    $item->game->description = [];
-                }
-            });
+        // Xử lý description null
+        $libraryItems->each(function ($item) {
+            if ($item->game && is_null($item->game->description)) {
+                $item->game->description = '';
+            }
         });
 
-        return view('libary', compact('orders'));
+        return view('library', compact('libraryItems'));
     }
 
     public function showOrderView($id)

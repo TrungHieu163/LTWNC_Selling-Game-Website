@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Game extends Model
@@ -15,13 +15,16 @@ class Game extends Model
         'description',
         'image',
         'trailer_url',
-        'category_id',
+    ];
+    
+    protected $casts = [
+        'description' => 'array',
     ];
 
-    // Quan hệ: Một Game thuộc về một Danh mục
-    public function category(): BelongsTo
+    // Quan hệ Many-to-Many với Category
+    public function categories(): BelongsToMany
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class);
     }
 
     // Quan hệ: Một Game có nhiều mã Key

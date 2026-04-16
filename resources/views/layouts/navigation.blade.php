@@ -16,6 +16,10 @@
                         {{ __('Trang chủ') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('inventory')" :active="request()->routeIs('inventory')">
+                        {{ __('Kho game') }}
+                    </x-nav-link>
+
                     <x-nav-link :href="route('search')" :active="request()->routeIs('search')">
                         {{ __('Tìm kiếm') }}
                     </x-nav-link>
@@ -24,7 +28,7 @@
                         {{ __('Tin tức') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('libary')" :active="request()->routeIs('libary')">
+                    <x-nav-link :href="route('library')" :active="request()->routeIs('libary')">
                         {{ __('Thư viện cá nhân') }}
                     </x-nav-link>
 

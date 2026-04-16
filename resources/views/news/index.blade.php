@@ -1,14 +1,15 @@
 <x-app-layout>
-    <div class="bg-[#121212] min-h-screen text-white py-12">
+    <div class="bg-[#121212] min-h-screen text-white py-12" x-data="{ 
+            activeNews: 1, 
+            timer: 0, 
+            total: 4,
+            next() { this.activeNews = this.activeNews < this.total ? this.activeNews + 1 : 1; this.timer = 0; },
+            prev() { this.activeNews = this.activeNews > 1 ? this.activeNews - 1 : this.total; this.timer = 0; }
+         }">
+
         <div class="max-w-[80%] mx-auto px-6">
 
-            <x-slot name="header">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ __('Tin tức') }}
-                </h2>
-            </x-slot>
-
-            <div class="mb-20">
+            <div class="mb-10">
                 <a href="/news/detail" class="group flex flex-col lg:flex-row gap-10 items-center">
                     <div class="w-full lg:w-2/3 overflow-hidden rounded-3xl aspect-video bg-[#1a1a1a]">
                         <img src="images/news_hero.jpg"
@@ -25,18 +26,54 @@
                             phiêu lưu đầy cảm xúc.
                         </p>
                         <span
-                            class="bg-white text-black px-10 py-4 rounded-xl font-bold uppercase text-sm w-fit hover:bg-gray-200 transition">
+                            class="bg-white text-black px-10 py-4 rounded-xl font-bold uppercase text-sm w-fit hover:bg-gray-200 transition cursor-pointer">
                             Xem chi tiết
                         </span>
                     </div>
                 </a>
             </div>
 
+            <div class="flex items-center justify-center gap-8 mb-20" x-init="setInterval(() => { 
+                    timer += 1; 
+                    if(timer >= 100) { next(); }
+                 }, 100)">
+
+                <button @click="prev()" class="p-2 text-gray-500 hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <div class="flex gap-4">
+                    <template x-for="i in total">
+                        <button @click="activeNews = i; timer = 0"
+                            class="relative flex items-center justify-center w-6 h-6">
+                            <svg class="absolute inset-0 w-full h-full -rotate-90" x-show="activeNews === i">
+                                <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="transparent"
+                                    stroke-dasharray="62.83" :stroke-dashoffset="62.83 - (62.83 * timer) / 100" />
+                            </svg>
+
+                            <div class="w-2 h-2 rounded-full transition-all duration-300"
+                                :class="activeNews === i ? 'bg-white scale-110' : 'bg-gray-600 hover:bg-gray-400'">
+                            </div>
+                        </button>
+                    </template>
+                </div>
+
+                <button @click="next()" class="p-2 text-gray-500 hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
             <div class="border-t border-gray-800 mb-16"></div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
-
-                <a href="/news/detail" class="group block">
+                <a href="/news/detail" class="group block transition duration-500" x-show="activeNews === 1"
+                    x-transition:enter="opacity-0 translate-y-4">
                     <div class="relative overflow-hidden rounded-2xl aspect-video mb-6 bg-[#1a1a1a]">
                         <img src="images/news_1.jpg"
                             class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
@@ -50,17 +87,14 @@
                         <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 min-h-[4.5rem]">
                             Tìm hiểu về hệ thống đối thoại mới giúp thay đổi cục diện trận đấu trong At Fate's End.
                         </p>
-                        <div class="mt-4 flex items-center">
-                            <span
-                                class="text-white text-xs font-bold border-b-2 border-transparent group-hover:border-white transition-all pb-1 uppercase tracking-widest">Tìm
-                                hiểu thêm</span>
-                        </div>
                     </div>
                 </a>
 
-                <div class="group block opacity-50 italic text-gray-600">... các tin khác ...</div>
-                <div class="group block opacity-50 italic text-gray-600">... các tin khác ...</div>
-
+                <template x-if="activeNews !== 1">
+                    <div class="col-span-3 text-center py-20 text-gray-600 italic">
+                        Đang hiển thị nội dung cho Trang báo số <span x-text="activeNews"></span>...
+                    </div>
+                </template>
             </div>
         </div>
     </div>

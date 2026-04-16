@@ -33,6 +33,30 @@
 
         @include('layouts.footer')
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @if(session('success'))
+            Swal.fire({
+                title: 'Thành công!',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                background: '#1a1a1a',
+                color: '#ffffff',
+                confirmButtonColor: '#2563eb'
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                title: 'Lỗi!',
+                text: "{{ session('error') }}",
+                icon: 'error',
+                background: '#1a1a1a',
+                color: '#ffffff',
+                confirmButtonColor: '#ef4444'
+            });
+        @endif
+    </script>
 </body>
 
 </html>

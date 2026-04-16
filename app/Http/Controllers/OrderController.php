@@ -31,14 +31,18 @@ class OrderController extends Controller
             $total = 0;
             $allKeys = [];
 
-            foreach ($cart as $gameId => $qty) {
+            foreach ($cart as $gameId => $details) {
                 $game = Game::findOrFail($gameId);
+
+                // Lấy số lượng từ mảng details (nếu không có thì mặc định là 1)
+                $qty = is_array($details) ? ($details['quantity'] ?? 1) : $details;
 
                 // Kiểm tra có đủ key chưa bán không
                 $availableCount = $game->availableKeys()->count();
 
                 if ($availableCount < $qty) {
-                    throw new \Exception("Game '{$game->name}' chỉ còn {$availableCount} key. Bạn yêu cầu {$qty}.");
+                    // Sửa lỗi Array to string conversion ở đây bằng cách dùng biến $qty đã xử lý
+                    throw new \Exception("Game " . $game->name . " chỉ còn " . $availableCount . " key. Bạn yêu cầu " . $qty . ".");
                 }
 
                 // Tạo OrderItem
@@ -134,32 +138,66 @@ class OrderController extends Controller
 
     //Xem chi tiết một đơn hàng
     public function showOrder($id)
-{
-    $order = Order::where('user_id', auth()->id())
-                  ->with(['items.game', 'gameKeys.game'])
-                  ->findOrFail($id);
+    {
+        $order = Order::where('user_id', auth()->id())
+                    ->with(['items.game', 'gameKeys.game'])
+                    ->findOrFail($id);
 
-    return response()->json([
-        'id'          => $order->id,
-        'total_price' => $order->total_price,
-        'status'      => $order->status,
-        'created_at'  => $order->created_at->format('d/m/Y H:i'),
-        
-        'items' => $order->items->map(function ($item) {
-            return [
-                'game_name' => $item->game->name,
-                'quantity'  => $item->quantity,
-                'price'     => $item->price,
-                'subtotal'  => $item->price * $item->quantity,
-            ];
-        }),
+        return response()->json([
+            'id'          => $order->id,
+            'total_price' => $order->total_price,
+            'status'      => $order->status,
+            'created_at'  => $order->created_at->format('d/m/Y H:i'),
+            
+            'items' => $order->items->map(function ($item) {
+                return [
+                    'game_name' => $item->game->name,
+                    'quantity'  => $item->quantity,
+                    'price'     => $item->price,
+                    'subtotal'  => $item->price * $item->quantity,
+                ];
+            }),
 
-        'keys' => $order->gameKeys->map(function ($key) {
-            return [
-                'game_name' => optional($key->game)->name ?? 'Unknown Game',
-                'key_code'  => $key->key_code,
-            ];
-        }),
-    ]);
-}
+            'keys' => $order->gameKeys->map(function ($key) {
+                return [
+                    'game_name' => optional($key->game)->name ?? 'Unknown Game',
+                    'key_code'  => $key->key_code,
+                ];
+            }),
+        ]);
+    }
+
+    /**
+     * Hiển thị Thư viện game đã mua (mỗi game chỉ hiển thị một lần)
+     */
+    public function myLibraryView()
+    {
+        $libraryItems = OrderItem::whereHas('order', function ($query) {
+                $query->where('user_id', auth()->id())
+                    ->where('status', 'completed');
+            })
+            ->with(['game.categories', 'order'])   // load thêm categories nếu cần
+            ->latest('created_at')                 // sắp xếp theo thời gian mua
+            ->get()
+            ->unique('game_id')                    // loại bỏ game trùng
+            ->values();                            // reset key array
+
+        // Xử lý description null
+        $libraryItems->each(function ($item) {
+            if ($item->game && is_null($item->game->description)) {
+                $item->game->description = '';
+            }
+        });
+
+        return view('library', compact('libraryItems'));
+    }
+
+    public function showOrderView($id)
+    {
+        $order = Order::where('user_id', auth()->id())
+                      ->with(['items.game', 'gameKeys.game'])
+                      ->findOrFail($id);
+
+        return view('orders.show', compact('order'));
+    }
 }

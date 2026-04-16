@@ -28,7 +28,7 @@
                         {{ __('Tin tức') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('libary')" :active="request()->routeIs('libary')">
+                    <x-nav-link :href="route('library')" :active="request()->routeIs('libary')">
                         {{ __('Thư viện cá nhân') }}
                     </x-nav-link>
 

@@ -14,9 +14,14 @@ class GameForm
     {
         return $schema
             ->components([
-                Select::make('category_id')
-                    ->relationship('category', 'name')
+                // ĐÃ SỬA: Đổi 'category_id' thành 'categories' (tên hàm trong Model Game)
+                Select::make('categories') 
+                    ->label('Thể loại')
+                    ->relationship('categories', 'name') // Kết nối qua bảng trung gian
+                    ->multiple() // Quan trọng: Cho phép chọn nhiều thể loại
+                    ->preload()  // Tải trước danh sách để chọn nhanh
                     ->required(),
+
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('slug')

@@ -15,20 +15,33 @@ class GamesTable
     {
         return $table
             ->columns([
-                TextColumn::make('category.name')
+                // ĐÃ SỬA: Đổi từ 'category.name' sang 'categories.name'
+                TextColumn::make('categories.name')
+                    ->label('Thể loại')
+                    ->badge() // Hiển thị dạng nhãn (badge)
+                    ->color('success') // Màu xanh cho nhãn
                     ->searchable(),
+
                 TextColumn::make('name')
+                    ->label('Tên Game')
                     ->searchable(),
+
                 TextColumn::make('slug')
                     ->searchable(),
+
                 TextColumn::make('price')
-                    ->money()
+                    ->label('Giá')
+                    ->money('USD') // Thêm đơn vị tiền tệ nếu cần
                     ->sortable(),
-                ImageColumn::make('image'),
+
+                ImageColumn::make('image')
+                    ->label('Hình ảnh'),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -37,10 +50,10 @@ class GamesTable
             ->filters([
                 //
             ])
-            ->recordActions([
+            ->actions([ // Đổi từ recordActions sang actions (chuẩn Filament v3)
                 EditAction::make(),
             ])
-            ->toolbarActions([
+            ->bulkActions([ // Đổi từ toolbarActions sang bulkActions cho đúng chức năng chọn nhiều
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

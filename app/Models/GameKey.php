@@ -10,6 +10,7 @@ class GameKey extends Model
 {
     protected $fillable = [
         'game_id',
+        'order_id',
         'key_code',
         'is_sold',
     ];
@@ -19,7 +20,7 @@ class GameKey extends Model
         return $this->belongsTo(Game::class);
     }
 
-    public function orders()
+    public function order()
     {
         return $this->belongsToMany(Order::class, 'order_game_keys');
     }

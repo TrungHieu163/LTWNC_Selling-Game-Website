@@ -30,21 +30,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('news.show');
     })->name('news.show');
 
-    Route::get('/giohang', function () {
-        return view('giohang');
-    })->name('giohang');
-
-    Route::get('/inventory', function () {
-        return view('inventory');
-    })->name('inventory');
-
+    Route::get('/inventory', [GameController::class, 'indexView'])->name('inventory');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
-    Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
@@ -52,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/api/my-orders', [OrderController::class, 'myOrders']);
     Route::get('/api/my-orders/{id}', [OrderController::class, 'showOrder']);
 
-    Route::get('/my-orders/{id}', [OrderController::class, 'showOrderView'])->name('orders.show');
+    Route::get('/my-orders/{id}/{game_id?}', [OrderController::class, 'showOrderView'])->name('keys');
 
     Route::get('/library', [OrderController::class, 'myLibraryView'])->name('library');
 });

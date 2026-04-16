@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Category;
 
 use Illuminate\Http\Request;
 
@@ -71,5 +72,46 @@ class GameController extends Controller
             $game->description = [];
         }
         return view('games', compact('game'));
+    }
+
+    public function searchView(Request $request)
+    {
+        // 1. Lấy tất cả danh mục để hiện ở bộ lọc
+        $categories = Category::all();
+
+        // 2. Bắt đầu query tìm kiếm
+        $query = Game::with('categories');
+
+        // Tìm kiếm theo tên game
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Lọc theo danh mục
+        if ($request->filled('category_id')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('categories.id', $request->category_id);
+            });
+        }
+
+        // 3. Lấy kết quả game (Phân trang 12 game mỗi trang)
+        $games = $query->latest()->paginate(12);
+
+        // 4. Trả về view search
+        return view('search', compact('categories', 'games'));
+    }
+
+    public function suggestions(Request $request)
+    {
+        $search = $request->query('q');
+        $games = [];
+
+        if (strlen($search) >= 2) {
+            $games = \App\Models\Game::where('name', 'like', "%$search%")
+                ->limit(5)
+                ->get(['id', 'name', 'price', 'image']);
+        }
+
+        return response()->json($games);
     }
 }

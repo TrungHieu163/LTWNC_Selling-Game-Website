@@ -16,6 +16,10 @@ class Game extends Model
         'image',
         'trailer_url',
     ];
+    
+    protected $casts = [
+        'description' => 'array',
+    ];
 
     // Quan hệ Many-to-Many với Category
     public function categories(): BelongsToMany

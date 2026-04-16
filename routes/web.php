@@ -21,13 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('search');
 
 
-    Route::get('/giohang', function () {
-        return view('giohang');
-    })->name('giohang');
-
-    Route::get('/libary', function () {
-        return view('libary');
-    })->name('libary');
+    Route::get('/giohang', [CartController::class, 'index'])->name('giohang');
 
     Route::get('/tin-tuc', function () {
         return view('news.index');
@@ -44,14 +38,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
-    Route::get('/cart', [CartController::class, 'index']);
-    Route::get('/cart/add/{id}', [CartController::class, 'add']);
-    Route::post('/checkout', [OrderController::class, 'checkout']);
-    Route::get('/my-orders', [OrderController::class, 'myOrders']);
-    Route::get('/my-orders/{id}', [OrderController::class, 'showOrder']);
+    Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    Route::get('/api/my-orders', [OrderController::class, 'myOrders']);
+    Route::get('/api/my-orders/{id}', [OrderController::class, 'showOrder']);
+
+    Route::get('/my-orders/{id}', [OrderController::class, 'showOrderView'])->name('orders.show');
+
+    Route::get('/libary', [OrderController::class, 'myOrdersView'])->name('libary');
 });
 
 
-Route::get('/games', [GameController::class, 'index']);
+Route::get('/api/games', [GameController::class, 'index']);
+Route::get('/api/games/{id}', [GameController::class, 'show']);
+
+Route::get('/games', [GameController::class, 'indexView'])->name('home');
+Route::get('/games/{id}', [GameController::class, 'showView'])->name('games.show');
 
 require __DIR__ . '/auth.php';

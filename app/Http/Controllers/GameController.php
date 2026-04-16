@@ -65,6 +65,11 @@ class GameController extends Controller
     public function showView($id)
     {
         $game = Game::with('categories')->findOrFail($id);
+        // Nếu description bị null (do chưa nhập), gán nó thành mảng rỗng 
+        // để các chỗ gọi như $game->description['developer'] không bị báo lỗi.
+        if (is_null($game->description)) {
+            $game->description = [];
+        }
         return view('games', compact('game'));
     }
 }

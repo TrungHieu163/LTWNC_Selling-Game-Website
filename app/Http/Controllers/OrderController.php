@@ -31,14 +31,18 @@ class OrderController extends Controller
             $total = 0;
             $allKeys = [];
 
-            foreach ($cart as $gameId => $qty) {
+            foreach ($cart as $gameId => $details) {
                 $game = Game::findOrFail($gameId);
+
+                // Lấy số lượng từ mảng details (nếu không có thì mặc định là 1)
+                $qty = is_array($details) ? ($details['quantity'] ?? 1) : $details;
 
                 // Kiểm tra có đủ key chưa bán không
                 $availableCount = $game->availableKeys()->count();
 
                 if ($availableCount < $qty) {
-                    throw new \Exception("Game '{$game->name}' chỉ còn {$availableCount} key. Bạn yêu cầu {$qty}.");
+                    // Sửa lỗi Array to string conversion ở đây bằng cách dùng biến $qty đã xử lý
+                    throw new \Exception("Game " . $game->name . " chỉ còn " . $availableCount . " key. Bạn yêu cầu " . $qty . ".");
                 }
 
                 // Tạo OrderItem
@@ -168,9 +172,18 @@ class OrderController extends Controller
         $orders = Order::where('user_id', auth()->id())
                        ->with(['items.game', 'gameKeys.game'])
                        ->latest()
-                       ->paginate(10);
+                       ->paginate(12);
 
-        return view('orders.index', compact('orders'));
+        // Đảm bảo không lỗi nếu description null
+        $orders->getCollection()->each(function ($order) {
+            $order->items->each(function ($item) {
+                if (is_null($item->game->description)) {
+                    $item->game->description = [];
+                }
+            });
+        });
+
+        return view('libary', compact('orders'));
     }
 
     public function showOrderView($id)

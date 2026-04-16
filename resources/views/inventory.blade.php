@@ -5,53 +5,8 @@
         </h2>
     </x-slot>
 
-    <div x-data="{ 
-            searchQuery: '', 
-            showDropdown: false, 
-            isSearched: false 
-         }" class="py-12 bg-[#121212] min-h-screen text-white">
-
-        <div class="max-w-[80%] mx-auto px-6" style="width: 80%;">
-            <div class="relative mb-12 flex gap-4">
-                <div class="relative flex-grow">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </span>
-
-                    <input type="text" x-model="searchQuery" @input="showDropdown = searchQuery.length > 0"
-                        @click.away="showDropdown = false" placeholder="Nhập tên game..."
-                        class="w-full bg-[#202020] border-none text-white pl-10 pr-4 py-3 rounded-md focus:ring-2 focus:ring-blue-500 transition shadow-lg outline-none">
-
-                    <div x-show="showDropdown" x-cloak x-transition
-                        class="absolute z-50 w-full mt-2 bg-[#252525] rounded-md shadow-2xl border border-gray-700 overflow-hidden">
-                        <div class="p-2">
-                            @for ($i = 1; $i <= 4; $i++) <a href="#"
-                                class="flex items-center gap-4 p-2 hover:bg-[#303030] rounded transition group">
-                                <img src="https://via.placeholder.com/40x50?text=G{{ $i }}"
-                                    class="w-10 h-12 object-cover rounded">
-                                <div>
-                                    <div class="text-sm font-bold group-hover:text-blue-500">Kết quả gợi ý {{ $i }}
-                                    </div>
-                                    <div class="text-xs text-gray-400">500.000 VNĐ</div>
-                                </div>
-                                </a>
-                                @endfor
-                        </div>
-                        <button
-                            class="w-full py-3 bg-[#303030] text-center text-sm font-bold hover:bg-blue-600 transition uppercase">
-                            Xem tất cả kết quả cho "<span x-text="searchQuery" class="text-blue-400"></span>"
-                        </button>
-                    </div>
-                </div>
-
-                <button
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md font-bold transition uppercase tracking-widest shadow-lg active:scale-95">
-                    Tìm ngay
-                </button>
-            </div>
+    <div class="py-12 bg-[#121212] min-h-screen">
+        <div class="max-w-[80%] mx-auto px-6">
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 @php

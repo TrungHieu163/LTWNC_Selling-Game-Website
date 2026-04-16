@@ -7,7 +7,7 @@ use App\Models\Game;
 
 class CartController extends Controller
 {
-    public function add($id) {
+    public function add(Request $request, $id) {
         // Tìm game trong DB
         $game = Game::findOrFail($id);
         $cart = session()->get('cart', []);
@@ -33,6 +33,11 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
+
+        if ($request->has('buy_now')) {
+            // Chuyển hướng thẳng đến trang giỏ hàng (hoặc trang thanh toán sau này)
+            return redirect()->route('giohang'); 
+        }
 
         return back()->with('success', 'Đã thêm game vào giỏ hàng!');
     }

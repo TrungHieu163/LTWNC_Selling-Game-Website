@@ -34,9 +34,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('news.show');
     })->name('news.show');
 
+    Route::get('/inventory', [GameController::class, 'indexView'])->name('inventory');
+
     // Kho đồ / Thư viện
     Route::get('/inventory', function () {
-        return view('inventory');
+        return 2view('inventory');
     })->name('inventory');
     Route::get('/library', [OrderController::class, 'myLibraryView'])->name('library');
 
@@ -45,6 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
+    Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     // Giỏ hàng (Cart)
     Route::get('/giohang', [CartController::class, 'index'])->name('giohang');
     Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
@@ -58,6 +62,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // API cho Mobile hoặc AJAX (Nếu cần)
     Route::get('/api/my-orders', [OrderController::class, 'myOrders']);
     Route::get('/api/my-orders/{id}', [OrderController::class, 'showOrder']);
+
+    Route::get('/my-orders/{id}/{game_id?}', [OrderController::class, 'showOrderView'])->name('keys');
+
+    Route::get('/library', [OrderController::class, 'myLibraryView'])->name('library');
 });
 
 // --- NHÓM ROUTE CÔNG KHAI (KHÔNG CẦN ĐĂNG NHẬP CŨNG XEM ĐƯỢC) ---

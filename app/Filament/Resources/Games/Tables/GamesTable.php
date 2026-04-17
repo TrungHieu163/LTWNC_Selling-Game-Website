@@ -31,7 +31,7 @@ class GamesTable
 
                 TextColumn::make('price')
                     ->label('Giá')
-                    ->money('USD') // Thêm đơn vị tiền tệ nếu cần
+                    ->money('VND') // Thêm đơn vị tiền tệ nếu cần
                     ->sortable(),
 
                 ImageColumn::make('image')

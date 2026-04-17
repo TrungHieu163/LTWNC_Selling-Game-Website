@@ -105,7 +105,7 @@
             <div class="text-center py-20">
                 <div class="text-6xl mb-6">🛒</div>
                 <h2 class="text-2xl font-bold mb-4 text-gray-400">Giỏ hàng của bạn đang trống</h2>
-                <a href="{{ route('home') }}" class="bg-white text-black px-10 py-3 rounded font-bold uppercase hover:bg-gray-200 transition">
+                <a href="{{ route('inventory') }}" class="bg-white text-black px-10 py-3 rounded font-bold uppercase hover:bg-gray-200 transition">
                     Tìm kiếm game
                 </a>
             </div>

@@ -77,10 +77,6 @@
                                 <span>Tạm tính</span>
                                 <span>{{ number_format($totalPrice) }} VNĐ</span>
                             </div>
-                            <div class="flex justify-between text-gray-400">
-                                <span>Giảm giá</span>
-                                <span>0 VNĐ</span>
-                            </div>
                         </div>
 
                         <div class="flex justify-between text-xl font-extrabold my-6">

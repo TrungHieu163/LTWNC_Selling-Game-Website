@@ -18,7 +18,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         }
         return view('dashboard');
     })->name('dashboard');
-    // ------------------------------------------
 
     Route::get('/search', [GameController::class, 'searchView'])->name('search');
     Route::get('/api/search-suggestions', [GameController::class, 'suggestions'])->name('api.search.suggestions');

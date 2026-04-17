@@ -192,12 +192,31 @@ class OrderController extends Controller
         return view('library', compact('libraryItems'));
     }
 
-    public function showOrderView($id)
-    {
-        $order = Order::where('user_id', auth()->id())
-                      ->with(['items.game', 'gameKeys.game'])
-                      ->findOrFail($id);
+    public function showOrderView($id, $game_id = null)
+{
+    // Nếu có game_id, mình sẽ lấy TẤT CẢ các key của game đó mà User này sở hữu
+    if ($game_id) {
+        $gameKeys = \App\Models\GameKey::where('game_id', $game_id)
+            ->whereHas('order', function($q) {
+                $q->where('user_id', auth()->id());
+            })
+            ->with('game')
+            ->latest()
+            ->get();
 
-        return view('orders.show', compact('order'));
+        // Tạo một object giả lập để không phải sửa giao diện Blade nhiều
+        $order = (object)[
+            'id' => 'Tất cả đơn hàng',
+            'created_at' => now(),
+            'gameKeys' => $gameKeys
+        ];
+    } else {
+        // Nếu không có game_id, vẫn hiện theo từng đơn hàng như cũ
+        $order = Order::where('user_id', auth()->id())
+                      ->with('gameKeys.game')
+                      ->findOrFail($id);
     }
+
+    return view('keys', compact('order'));
+}  
 }

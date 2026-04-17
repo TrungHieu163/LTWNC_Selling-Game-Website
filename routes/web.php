@@ -56,7 +56,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/api/games', [GameController::class, 'index']);
 Route::get('/api/games/{id}', [GameController::class, 'show']);
 
-Route::get('/games', [GameController::class, 'indexView'])->name('home');
 Route::get('/games/{id}', [GameController::class, 'showView'])->name('games.show');
 
 require __DIR__ . '/auth.php';

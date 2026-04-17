@@ -52,7 +52,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/library', [OrderController::class, 'myLibraryView'])->name('library');
 });
 
-
 Route::get('/api/games', [GameController::class, 'index']);
 Route::get('/api/games/{id}', [GameController::class, 'show']);
 

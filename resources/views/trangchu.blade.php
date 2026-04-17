@@ -43,16 +43,19 @@
         </div>
 
         <!-- ==================== KHÁM PHÁ TRÒ CHƠI MỚI ==================== -->
-        <div class="mt-20" x-data="{ currentSlide: 0 }">
+        <div class="mt-20" x-data="{ currentSlide: 0, totalItems: 6, itemsPerPage: 3 }">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-white text-2xl font-bold">Khám phá trò chơi mới</h2>
 
                 <div class="flex gap-3">
-                    <button @click="currentSlide = Math.max(0, currentSlide - 1)"
+                    <button
+                        @click="currentSlide = (currentSlide === 0) ? (totalItems / itemsPerPage) - 1 : currentSlide - 1"
                         class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition">
                         ←
                     </button>
-                    <button @click="currentSlide = Math.min(2, currentSlide + 1)"
+
+                    <button
+                        @click="currentSlide = (currentSlide >= (totalItems / itemsPerPage) - 1) ? 0 : currentSlide + 1"
                         class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition">
                         →
                     </button>
@@ -61,9 +64,8 @@
 
             <div class="overflow-hidden">
                 <div class="flex transition-transform duration-500 ease-out"
-                    :style="'transform: translateX(-' + (currentSlide * 33.333) + '%)'">
+                    :style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
 
-                    <!-- Game 1 -->
                     <div class="w-1/3 flex-shrink-0 px-3">
                         <div class="group cursor-pointer">
                             <div class="relative overflow-hidden rounded-2xl aspect-[4/5] mb-4 bg-[#1a1a1a]">
@@ -74,8 +76,6 @@
                             <p class="text-emerald-400 text-sm">560.000 ₫</p>
                         </div>
                     </div>
-
-                    <!-- Game 2 -->
                     <div class="w-1/3 flex-shrink-0 px-3">
                         <div class="group cursor-pointer">
                             <div class="relative overflow-hidden rounded-2xl aspect-[4/5] mb-4 bg-[#1a1a1a]">
@@ -86,8 +86,6 @@
                             <p class="text-emerald-400 text-sm">218.000 ₫</p>
                         </div>
                     </div>
-
-                    <!-- Game 3 -->
                     <div class="w-1/3 flex-shrink-0 px-3">
                         <div class="group cursor-pointer">
                             <div class="relative overflow-hidden rounded-2xl aspect-[4/5] mb-4 bg-[#1a1a1a]">
@@ -98,10 +96,38 @@
                             <p class="text-emerald-400 text-sm">400.000 ₫</p>
                         </div>
                     </div>
+
+                    <div class="w-1/3 flex-shrink-0 px-3">
+                        <div class="group cursor-pointer">
+                            <div class="relative overflow-hidden rounded-2xl aspect-[4/5] mb-4 bg-[#1a1a1a]">
+                                <img src="/images/new_4.jpg" class="w-full h-full object-cover rounded-2xl">
+                            </div>
+                            <h3 class="text-white font-semibold">Game 4</h3>
+                            <p class="text-emerald-400 text-sm">100.000 ₫</p>
+                        </div>
+                    </div>
+                    <div class="w-1/3 flex-shrink-0 px-3">
+                        <div class="group cursor-pointer">
+                            <div class="relative overflow-hidden rounded-2xl aspect-[4/5] mb-4 bg-[#1a1a1a]">
+                                <img src="/images/new_5.jpg" class="w-full h-full object-cover rounded-2xl">
+                            </div>
+                            <h3 class="text-white font-semibold">Game 5</h3>
+                            <p class="text-emerald-400 text-sm">200.000 ₫</p>
+                        </div>
+                    </div>
+                    <div class="w-1/3 flex-shrink-0 px-3">
+                        <div class="group cursor-pointer">
+                            <div class="relative overflow-hidden rounded-2xl aspect-[4/5] mb-4 bg-[#1a1a1a]">
+                                <img src="/images/new_6.jpg" class="w-full h-full object-cover rounded-2xl">
+                            </div>
+                            <h3 class="text-white font-semibold">Game 6</h3>
+                            <p class="text-emerald-400 text-sm">300.000 ₫</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-
         <div class="mt-20">
 
             <div class="flex items-center justify-between mb-8">
@@ -342,9 +368,167 @@
                 </p>
 
                 <div class="flex items-center gap-4 mt-2">
-                    <a href="#"
+                    <a href="inventory"
                         class="bg-[#007dfc] hover:bg-[#0069d2] text-white font-bold py-3.5 px-8 rounded-xl transition duration-300 uppercase text-sm tracking-wider">
                         Mua ngay
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 border-t border-white/10 pt-12">
+
+            <div>
+                <div class="flex items-center justify-between mb-6 group cursor-pointer w-fit">
+                    <h2 class="text-white text-lg font-bold group-hover:text-gray-400 transition">Mới phát hành <span
+                            class="text-sm ml-1">›</span></h2>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/thumb_1.jpg" class="w-16 h-20 object-cover rounded-lg shadow-md"
+                            alt="Task Time">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4
+                                class="text-white font-semibold text-sm group-hover:text-gray-300 transition line-clamp-1">
+                                Task Time</h4>
+                            <p class="text-gray-400 text-xs mt-1">84.000 ₫</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/thumb_2.jpg" class="w-16 h-20 object-cover rounded-lg shadow-md"
+                            alt="Under Par">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4
+                                class="text-white font-semibold text-sm group-hover:text-gray-300 transition line-clamp-1">
+                                Under Par Golf Architect</h4>
+                            <p class="text-gray-400 text-xs mt-1">209.000 ₫</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/thumb_3.jpg" class="w-16 h-20 object-cover rounded-lg shadow-md"
+                            alt="Lucky Tower">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4
+                                class="text-white font-semibold text-sm group-hover:text-gray-300 transition line-clamp-1">
+                                Lucky Tower Ultimate</h4>
+                            <p class="text-gray-400 text-xs mt-1 italic">Hiện đang có mặt</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/thumb_4.jpg" class="w-16 h-20 object-cover rounded-lg shadow-md"
+                            alt="Knightfall">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4
+                                class="text-white font-semibold text-sm group-hover:text-gray-300 transition line-clamp-1">
+                                Knightfall Requiem</h4>
+                            <p class="text-gray-400 text-xs mt-1">52.000 ₫</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/thumb_5.jpg" class="w-16 h-20 object-cover rounded-lg shadow-md" alt="Summer">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4
+                                class="text-white font-semibold text-sm group-hover:text-gray-300 transition line-clamp-1">
+                                Summer's Heartbeat</h4>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span
+                                    class="bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">-10%</span>
+                                <p class="text-gray-500 text-xs line-through">209.000 ₫</p>
+                                <p class="text-gray-300 text-xs">188.100 ₫</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-6 group cursor-pointer w-fit">
+                    <h2 class="text-white text-lg font-bold group-hover:text-gray-400 transition">Trò chơi đánh giá cao
+                        nhất <span class="text-sm ml-1">›</span></h2>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/top_1.jpg" class="w-16 h-20 object-cover rounded-lg" alt="RimWorld">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">RimWorld</h4>
+                            <p class="text-gray-400 text-xs mt-1">445.000 ₫</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/top_2.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Dave">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">DAVE THE DIVER</h4>
+                            <p class="text-gray-400 text-xs mt-1">260.000 ₫</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/top_3.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Blasphemous">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">Blasphemous</h4>
+                            <p class="text-gray-400 text-xs mt-1">300.000 ₫</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/top_4.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Kingdom Hearts">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">KINGDOM HEARTS III</h4>
+                            <p class="text-gray-400 text-xs mt-1">1.250.000 ₫</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/top_5.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Monument">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">Monument Valley 2</h4>
+                            <p class="text-gray-400 text-xs mt-1">115.000 ₫</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-6 group cursor-pointer w-fit">
+                    <h2 class="text-white text-lg font-bold group-hover:text-gray-400 transition">Sắp ra mắt <span
+                            class="text-sm ml-1">›</span></h2>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/soon_1.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Better Mart">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">Better Mart</h4>
+                            <p class="text-gray-500 text-[10px] mt-1 uppercase font-bold tracking-wider">Có sẵn vào
+                                17/04/26</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/soon_2.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Bunny Guys">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">Bunny Guys!</h4>
+                            <p class="text-gray-500 text-[10px] mt-1 uppercase font-bold tracking-wider">Có sẵn vào
+                                18/04/26</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/soon_3.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Word Search">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1 italic">WORD SEARCH BY JGABRIB</h4>
+                            <p class="text-gray-500 text-[10px] mt-1 uppercase font-bold tracking-wider italic">Chạy lần
+                                đầu - 18/04</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/soon_4.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Island">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">Treasure Island</h4>
+                            <p class="text-gray-500 text-[10px] mt-1 uppercase font-bold tracking-wider">Có sẵn vào
+                                20/04/26</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition group">
+                        <img src="/images/soon_5.jpg" class="w-16 h-20 object-cover rounded-lg" alt="Creepy Scary">
+                        <div class="flex-1 border-b border-white/5 pb-2 group-last:border-0">
+                            <h4 class="text-white font-semibold text-sm line-clamp-1">Creepy Scary</h4>
+                            <p class="text-gray-500 text-[10px] mt-1 uppercase font-bold tracking-wider">Có sẵn vào
+                                21/04/26</p>
+                        </div>
                     </a>
                 </div>
             </div>

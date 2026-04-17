@@ -22,7 +22,7 @@
                             <!-- Overlay -->
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <a href="{{ route('library', $item->game->id) }}"
+                                  <a href="{{ route('keys', ['id' => $item->order_id, 'game_id' => $item->game->id]) }}"
                                     class="bg-white text-black px-8 py-3 rounded-full font-bold text-sm hover:bg-blue-600 hover:text-white transition">
                                     Xem mã Key
                                 </a>

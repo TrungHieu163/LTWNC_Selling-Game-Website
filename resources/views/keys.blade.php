@@ -48,7 +48,7 @@
                                     </h2>
                                     {{-- Hiện ngày mua của từng Key nếu đang xem danh sách tổng hợp --}}
                                     @if(request()->game_id)
-                                        <span class="text-[10px] text-gray-500 font-mono">Mua ngày: {{ $key->created_at->format('d/m/Y') }}</span>
+                                        <span class="text-[10px] text-gray-500 font-mono">Mua ngày: {{ $key->order->first()->created_at->format('d/m/Y') }}</span>
                                     @endif
                                 </div>
                                 

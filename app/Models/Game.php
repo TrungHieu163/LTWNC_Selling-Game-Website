@@ -22,9 +22,9 @@ class Game extends Model
     ];
 
     // Quan hệ Many-to-Many với Category
-    public function categories(): BelongsToMany
+    public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class, 'category_game');
     }
 
     // Quan hệ: Một Game có nhiều mã Key

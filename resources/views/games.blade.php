@@ -1,4 +1,5 @@
 <x-app-layout>
+    {{-- Toast thông báo khi thêm vào giỏ hàng --}}
     <div x-data="{ 
             showToast: false, 
             timeout: null,
@@ -22,15 +23,12 @@
                     </path>
                 </svg>
             </div>
-
             <div class="flex-grow">
                 <p class="text-white font-bold text-sm">Đã thêm vào giỏ hàng!</p>
             </div>
-
             <button class="text-gray-500 hover:text-white transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
         </div>
@@ -41,156 +39,151 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                 <div class="lg:col-span-2 space-y-12">
-                    <div x-data="{ activeMedia: 'video' }" class="space-y-6">
+                    {{-- Phần Media (Trailer & Ảnh) --}}
+                    <div x-data="{ activeMedia: '{{ $game->trailer_url ? 'video' : 'image1' }}' }" class="space-y-6">
                         <div class="aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
-                            <template x-if="activeMedia === 'video'">
-                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                                    frameborder="0" allowfullscreen></iframe>
-                            </template>
+                            @if($game->trailer_url)
+                                <template x-if="activeMedia === 'video'">
+                                    <iframe class="w-full h-full" 
+                                            src="https://www.youtube.com/embed/{{ Str::afterLast($game->trailer_url, '=') }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                </template>
+                            @endif
                             <template x-if="activeMedia === 'image1'">
-                                <img src="https://via.placeholder.com/1280x720" class="w-full h-full object-cover">
+                                <img src="{{ asset('images/' . $game->image) }}" class="w-full h-full object-cover">
                             </template>
                         </div>
 
                         <div class="flex justify-center items-center gap-4 py-2 border-t border-gray-800">
-                            <button @click="activeMedia = 'video'"
-                                class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition flex items-center justify-center overflow-hidden hover:scale-105"
-                                :class="activeMedia === 'video' ? 'border-blue-500' : 'border-gray-700'">
-                                <span class="text-xs text-white font-bold uppercase tracking-wider">Trailer</span>
-                            </button>
+                            @if($game->trailer_url)
+                                <button @click="activeMedia = 'video'"
+                                    class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition flex items-center justify-center overflow-hidden hover:scale-105"
+                                    :class="activeMedia === 'video' ? 'border-blue-500' : 'border-gray-700'">
+                                    <span class="text-xs text-white font-bold uppercase tracking-wider">Trailer</span>
+                                </button>
+                            @endif
 
                             <button @click="activeMedia = 'image1'"
                                 class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition overflow-hidden hover:scale-105"
                                 :class="activeMedia === 'image1' ? 'border-blue-500' : 'border-gray-700'">
-                                <img src="https://via.placeholder.com/1280x720"
-                                    class="w-full h-full object-cover object-center">
+                                <img src="{{ asset('images/' . $game->image) }}" class="w-full h-full object-cover">
                             </button>
                         </div>
                     </div>
 
+                    {{-- Giới thiệu trò chơi --}}
                     <div class="text-gray-300">
-                        <h2 class="text-2xl font-bold text-white mb-4">Giới thiệu về trò chơi</h2>
-                        <p class="leading-relaxed text-lg">
-                            Mô tả ngắn gọn về trò chơi của bạn ở đây. Một câu tóm tắt đầy ấn tượng để thu hút người chơi
-                            ngay từ cái nhìn đầu tiên.
-                        </p>
+                        <h2 class="text-2xl font-bold text-white mb-4 italic">GIỚI THIỆU TRÒ CHƠI</h2>
+                        <div class="leading-relaxed text-lg prose prose-invert max-w-none">
+                            {{-- Sử dụng phần intro trong description hoặc hiển thị mặc định --}}
+                            {!! nl2br(e($game->description['intro'] ?? 'Thông tin giới thiệu về trò chơi đang được cập nhật.')) !!}
+                        </div>
                     </div>
 
+                    {{-- Thể loại & Nổi bật --}}
                     <div class="grid grid-cols-2 gap-8 py-6 border-t border-gray-800">
                         <div>
-                            <span class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest">Thể
-                                loại</span>
+                            <span class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest italic">Thể loại</span>
                             <div class="flex flex-wrap gap-4 font-medium text-sm">
-                                <a href="#"
-                                    class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">Dẫn
-                                    truyện</a>
-                                <a href="#"
-                                    class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">Hành
-                                    động</a>
-                                <a href="#"
-                                    class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">Thế
-                                    giới mở</a>
+                                @foreach($game->categories as $category)
+                                    <a href="{{ route('search', ['category_id' => $category->id]) }}"
+                                       class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">
+                                        {{ $category->name }}
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                         <div class="border-l border-gray-800 pl-8">
-                            <span class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest">Nổi
-                                bật</span>
-                            <div class="flex flex-wrap gap-4 font-medium text-sm">
-                                <a href="#"
-                                    class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">Một
-                                    người chơi</a>
+                            <span class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest italic">Tính năng</span>
+                            <div class="flex flex-wrap gap-4 font-medium text-sm text-white">
+                                {{ $game->description['features'] ?? 'Chơi đơn' }}
                             </div>
                         </div>
                     </div>
 
+                    {{-- Yêu cầu hệ thống --}}
                     <div class="bg-gray-900/30 p-8 rounded-xl border border-gray-800">
-                        <h2 class="text-xl font-bold text-white mb-8 uppercase tracking-tighter">Yêu cầu hệ thống</h2>
+                        <h2 class="text-xl font-bold text-white mb-8 uppercase tracking-tighter italic">Yêu cầu hệ thống</h2>
                         <div class="grid md:grid-cols-2 gap-12">
+                            {{-- Cấu hình tối thiểu --}}
                             <div class="space-y-4">
-                                <h3
-                                    class="text-gray-500 uppercase text-xs font-black mb-4 border-b border-gray-800 pb-2 italic">
-                                    Tối thiểu</h3>
+                                <h3 class="text-gray-500 uppercase text-xs font-black mb-4 border-b border-gray-800 pb-2 italic">Tối thiểu</h3>
                                 <ul class="space-y-4 text-sm">
-                                    <li class="flex flex-col"><span
-                                            class="text-gray-500 text-[11px] uppercase">HĐH</span> <span
-                                            class="font-bold">Windows 10 64-bit</span></li>
-                                    <li class="flex flex-col"><span
-                                            class="text-gray-500 text-[11px] uppercase">CPU</span> <span
-                                            class="font-bold">Intel Core i5-8400</span></li>
-                                    <li class="flex flex-col"><span
-                                            class="text-gray-500 text-[11px] uppercase">RAM</span> <span
-                                            class="font-bold">8 GB</span></li>
+                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">HĐH</span> <span class="font-bold">{{ $game->description['min_os'] ?? 'Windows 10 64-bit' }}</span></li>
+                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">CPU</span> <span class="font-bold">{{ $game->description['min_cpu'] ?? 'Intel Core i5' }}</span></li>
+                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">RAM</span> <span class="font-bold">{{ $game->description['min_ram'] ?? '8 GB' }}</span></li>
+                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">Đồ họa</span> <span class="font-bold">{{ $game->description['min_gpu'] ?? 'NVIDIA GTX 1050' }}</span></li>
                                 </ul>
                             </div>
+                            {{-- Cấu hình khuyến nghị --}}
                             <div class="space-y-4">
-                                <h3
-                                    class="text-gray-500 uppercase text-xs font-black mb-4 border-b border-gray-800 pb-2 italic">
-                                    Khuyến nghị</h3>
+                                <h3 class="text-gray-500 uppercase text-xs font-black mb-4 border-b border-gray-800 pb-2 italic">Khuyến nghị</h3>
                                 <ul class="space-y-4 text-sm">
-                                    <li class="flex flex-col"><span
-                                            class="text-gray-500 text-[11px] uppercase">HĐH</span> <span
-                                            class="font-bold">Windows 11 64-bit</span></li>
-                                    <li class="flex flex-col"><span
-                                            class="text-gray-500 text-[11px] uppercase">CPU</span> <span
-                                            class="font-bold">Intel Core i7-9700</span></li>
-                                    <li class="flex flex-col"><span
-                                            class="text-gray-500 text-[11px] uppercase">RAM</span> <span
-                                            class="font-bold">16 GB</span></li>
+                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">HĐH</span> <span class="font-bold">{{ $game->description['rec_os'] ?? 'Windows 11 64-bit' }}</span></li>
+                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">CPU</span> <span class="font-bold">{{ $game->description['rec_cpu'] ?? 'Intel Core i7' }}</span></li>
+                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">RAM</span> <span class="font-bold">{{ $game->description['rec_ram'] ?? '16 GB' }}</span></li>
+                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">Đồ họa</span> <span class="font-bold">{{ $game->description['rec_gpu'] ?? 'NVIDIA RTX 2060' }}</span></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {{-- Sidebar: Giá và Mua hàng --}}
                 <div class="lg:col-span-1">
-                    <div
-                        class="sticky top-10 bg-[#1a1a1a] p-8 rounded-xl border border-gray-800 shadow-2xl overflow-hidden relative">
+                    <div class="sticky top-10 bg-[#1a1a1a] p-8 rounded-xl border border-gray-800 shadow-2xl overflow-hidden relative">
                         <div class="absolute -top-4 -right-4 opacity-5 pointer-events-none">
                             <svg class="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 0L1.5 6v12L12 24l10.5-6V6L12 0z" />
                             </svg>
                         </div>
 
-                        <h1 class="text-4xl font-black text-white mb-2 tracking-tighter">Game Title</h1>
-                        <div
-                            class="inline-block bg-gray-800 px-2 py-1 rounded text-[10px] font-bold uppercase mb-6 tracking-widest text-gray-400 italic">
-                            Bản Cơ Bản</div>
+                        <h1 class="text-4xl font-black text-white mb-2 tracking-tighter">{{ $game->name }}</h1>
+                        <div class="inline-block bg-gray-800 px-2 py-1 rounded text-[10px] font-bold uppercase mb-6 tracking-widest text-gray-400 italic">
+                            Bản Quyền Chính Thức
+                        </div>
 
-                        <div class="text-3xl font-black text-white mb-8">500.000 VNĐ</div>
+                        <div class="text-3xl font-black text-white mb-8">
+                            {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                        </div>
 
                         <div class="space-y-4">
-                            <button
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded uppercase tracking-[0.2em] text-sm transition shadow-lg shadow-blue-900/20 active:scale-95">
-                                Mua ngay
-                            </button>
+                            {{-- Form mua hàng trực tiếp --}}
+                            <form action="{{ route('cart.add', $game->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="buy_now" value="1">
+                                <button type="submit"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded uppercase tracking-[0.2em] text-sm transition shadow-lg shadow-blue-900/20 active:scale-95">
+                                    Mua ngay
+                                </button>
+                            </form>
 
-                            <button @click="$dispatch('add-to-cart')"
-                                class="w-full text-white border border-gray-700 hover:bg-gray-800 font-bold py-4 px-4 rounded transition uppercase text-xs tracking-widest flex items-center justify-center gap-3 group active:scale-95">
-                                <svg class="w-5 h-5 group-hover:scale-110 transition" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4"></path>
-                                </svg>
-                                Thêm vào giỏ hàng
-                            </button>
+                            {{-- Nút thêm vào giỏ hàng qua AJAX/Dispatch --}}
+                            <form action="{{ route('cart.add', $game->id) }}" method="POST" 
+                                  @submit.prevent="fetch($el.action, { method: 'POST', body: new FormData($el), headers: { 'X-Requested-With': 'XMLHttpRequest' } }).then(() => $dispatch('add-to-cart'))">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full text-white border border-gray-700 hover:bg-gray-800 font-bold py-4 px-4 rounded transition uppercase text-xs tracking-widest flex items-center justify-center gap-3 group active:scale-95">
+                                    <svg class="w-5 h-5 group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                    </svg>
+                                    Thêm vào giỏ hàng
+                                </button>
+                            </form>
                         </div>
 
                         <div class="mt-10 space-y-4 border-t border-gray-800 pt-8">
                             <div class="flex justify-between text-[13px]">
-                                <span class="text-gray-500 font-medium">Nhà phát triển</span>
-                                <span
-                                    class="text-white font-bold underline decoration-gray-700 underline-offset-4">Studio
-                                    XYZ</span>
+                                <span class="text-gray-500 font-medium italic">Nhà phát triển</span>
+                                <span class="text-white font-bold underline decoration-gray-700 underline-offset-4">{{ $game->description['developer'] ?? 'Đang cập nhật' }}</span>
                             </div>
                             <div class="flex justify-between text-[13px]">
-                                <span class="text-gray-500 font-medium">Nhà phát hành</span>
-                                <span
-                                    class="text-white font-bold underline decoration-gray-700 underline-offset-4">Studio
-                                    ABC</span>
+                                <span class="text-gray-500 font-medium italic">Nhà phát hành</span>
+                                <span class="text-white font-bold underline decoration-gray-700 underline-offset-4">{{ $game->description['publisher'] ?? 'Youthink Store' }}</span>
                             </div>
                             <div class="flex justify-between text-[13px]">
-                                <span class="text-gray-500 font-medium">Ngày phát hành</span>
-                                <span class="text-white font-bold italic">13/04/2026</span>
+                                <span class="text-gray-500 font-medium italic">Ngày phát hành</span>
+                                <span class="text-white font-bold italic">{{ $game->description['released_at'] ?? $game->created_at->format('d/m/Y') }}</span>                            
                             </div>
                         </div>
                     </div>
@@ -201,31 +194,11 @@
     </div>
 
     <style>
-    [x-cloak] {
-        display: none !important;
-    }
-
-    /* Hiệu ứng mượt mà cho phông nền tối */
-    body {
-        background-color: #121212;
-    }
-
-    /* Tùy chỉnh thanh cuộn nếu cần */
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: #121212;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #252525;
-        border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: #303030;
-    }
+    [x-cloak] { display: none !important; }
+    body { background-color: #121212; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #121212; }
+    ::-webkit-scrollbar-thumb { background: #252525; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #303030; }
     </style>
 </x-app-layout>

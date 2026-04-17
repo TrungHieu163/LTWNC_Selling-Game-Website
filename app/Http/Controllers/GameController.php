@@ -60,7 +60,7 @@ class GameController extends Controller
     public function indexView()
     {
         $games = Game::with('categories')->latest()->paginate(12);
-        return view('trangchu', compact('games'));
+        return view('inventory', compact('games'));
     }
 
     public function showView($id)

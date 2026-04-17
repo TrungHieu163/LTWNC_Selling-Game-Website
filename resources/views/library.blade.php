@@ -44,9 +44,8 @@
                             </div>
 
                             <div class="mt-6 text-xs text-gray-400 flex justify-between">
-                                <span>Đã mua:</span>
-                                <span
-                                    class="text-emerald-400 font-medium">{{ $item->order->created_at->format('d/m/Y') }}</span>
+                                <span>Ngày mua:</span>
+                                <span class="text-emerald-400 font-medium">{{ $item->order->created_at->format('d/m/Y') }}</span>
                             </div>
                         </div>
                     </div>

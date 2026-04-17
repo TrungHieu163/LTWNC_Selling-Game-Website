@@ -25,14 +25,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('news.index');
     })->name('news.index');
 
-
     Route::get('/tin-tuc/chi-tiet', function () {
         return view('news.show');
     })->name('news.show');
-
-    Route::get('/giohang', function () {
-        return view('giohang');
-    })->name('giohang');
 
     Route::get('/inventory', function () {
         return view('inventory');
@@ -57,6 +52,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/library', [OrderController::class, 'myLibraryView'])->name('library');
 });
 
+Route::get('/checkout', function () {
+    return view('checkout');
+});
 
 Route::get('/api/games', [GameController::class, 'index']);
 Route::get('/api/games/{id}', [GameController::class, 'show']);

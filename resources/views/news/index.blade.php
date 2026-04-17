@@ -7,8 +7,13 @@
             prev() { this.activeNews = this.activeNews > 1 ? this.activeNews - 1 : this.total; this.timer = 0; }
          }">
 
-        <div class="max-w-[80%] mx-auto px-6">
+        <x-slot name="header">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Tin tức mới nhất về game') }}
+            </h2>
+        </x-slot>
 
+        <div class="max-w-[80%] mx-auto px-6">
             <div class="mb-10">
                 <a href="/news/detail" class="group flex flex-col lg:flex-row gap-10 items-center">
                     <div class="w-full lg:w-2/3 overflow-hidden rounded-3xl aspect-video bg-[#1a1a1a]">

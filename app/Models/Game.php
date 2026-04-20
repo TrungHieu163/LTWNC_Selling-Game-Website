@@ -38,4 +38,10 @@ class Game extends Model
     {
         return $this->keys()->where('is_sold', false);
     }
+
+    public function getYoutubeIdAttribute()
+    {
+        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $this->trailer_url, $match);
+        return $match[1] ?? null;
+    }
 }

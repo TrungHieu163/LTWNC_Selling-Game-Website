@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->validateCsrfTokens(except: [
+            '/payos-webhook', // Cho phép PayOS bắn dữ liệu vào link này
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

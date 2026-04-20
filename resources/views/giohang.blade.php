@@ -28,7 +28,7 @@
                             
                             <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 flex items-center gap-6 group hover:bg-[#202020] transition">
                                 <div class="w-24 h-32 flex-shrink-0 overflow-hidden rounded shadow-md">
-                                    <img src="{{ asset('storage/' . ($details['image'] ?? '')) }}"
+                                    <img src="{{ asset('storage/images/' . ($details['image'] ?? '')) }}"
                                          class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                                          onerror="this.src='https://via.placeholder.com/150x200'">
                                 </div>
@@ -84,12 +84,9 @@
                             <span class="text-blue-500">{{ number_format($totalPrice) }} VNĐ</span>
                         </div>
 
-                        <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-4 rounded transition uppercase tracking-widest shadow-lg">
-                                Thanh toán ngay
-                            </button>
-                        </form>
+                        <a href="{{ route('checkout.view') }}" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-4 rounded transition uppercase tracking-widest shadow-lg">
+                            Thanh toán
+                        </a>
                         
                         <p class="text-[10px] text-gray-500 mt-4 text-center italic">
                             * Mã kích hoạt sẽ được hiển thị ngay sau khi thanh toán thành công.

@@ -48,7 +48,7 @@
                             <div class="p-2">
                                 <template x-for="game in suggestions" :key="game.id">
                                     <a :href="'/games/' + game.id" class="flex items-center gap-4 p-2 hover:bg-[#303030] rounded transition group">
-                                        <img :src="'/storage/' + game.image" class="w-10 h-12 object-cover rounded" onerror="this.src='https://via.placeholder.com/40x50'">
+                                        <img :src="'/storage/images/' + game.image" class="w-10 h-12 object-cover rounded" onerror="this.src='https://via.placeholder.com/40x50'">
                                         <div>
                                             <div class="text-sm font-bold group-hover:text-blue-500" x-text="game.name"></div>
                                             <div class="text-xs text-gray-400" x-text="new Intl.NumberFormat().format(game.price) + ' VNĐ'"></div>
@@ -114,7 +114,7 @@
                     <div class="group cursor-pointer">
                         <a href="{{ route('games.show', $game->id) }}">
                             <div class="aspect-[3/4] overflow-hidden rounded-lg mb-3">
-                                <img src="{{ asset('storage/' . $game->image) }}"
+                                <img src="{{ asset('storage/images/' . $game->image) }}"
                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                                     onerror="this.src='https://via.placeholder.com/300x400'">
                             </div>

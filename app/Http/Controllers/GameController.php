@@ -117,20 +117,38 @@ class GameController extends Controller
     }
     public function homeView()
     {
+        // 1. Lấy dữ liệu Game từ Database
         $bannerGames = Game::latest()->take(5)->get();
         $newGames = Game::latest()->take(9)->get();
         $freeGames = Game::where('price', 0)->latest()->take(3)->get();
         $recentlyReleased = Game::latest()->take(30)->get();
         $topRated = Game::inRandomOrder()->take(30)->get();
 
+        // 2. Lấy dữ liệu Tin tức từ file JSON
+        $path = resource_path('views/news/news.json');
+        $homeNews = collect([]); // Khởi tạo mảng rỗng để tránh lỗi nếu không có file
+
+        if (file_exists($path)) {
+            $newsJson = file_get_contents($path);
+            $allNews = json_decode($newsJson, true);
+
+            // Chỉ lấy tin tức nếu JSON decode thành công
+            if (is_array($allNews)) {
+                $homeNews = collect($allNews)->take(3);
+            }
+        }
+
+        // 3. Xác định view (dashboard hoặc welcome)
         $view = request()->is('dashboard') ? 'dashboard' : 'welcome';
 
+        // 4. Return DUY NHẤT một lần với đầy đủ tất cả các biến
         return view($view, compact(
             'bannerGames',
             'newGames',
             'freeGames',
             'recentlyReleased',
-            'topRated'
+            'topRated',
+            'homeNews' // Thêm biến này vào đây
         ));
     }
 }

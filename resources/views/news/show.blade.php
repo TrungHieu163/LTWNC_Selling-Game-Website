@@ -3,49 +3,48 @@
         <article class="max-w-[800px] mx-auto px-6">
 
             <nav class="flex gap-2 text-gray-500 text-xs font-bold uppercase tracking-widest mb-8">
-                <a href="/news" class="hover:text-white">Tin tức</a>
+                <a href="{{ route('news.index') }}" class="hover:text-white transition">Tin tức</a>
                 <span>/</span>
-                <span class="text-gray-300">Chi tiết</span>
+                <span class="text-gray-300">Chi tiết bài viết</span>
             </nav>
 
             <header class="mb-12">
-                <h1 class="text-5xl font-extrabold mb-6 leading-tight">Rung cảm với hoài niệm của Mixtape</h1>
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
+                    {{ $article['title'] }}
+                </h1>
                 <div class="flex items-center gap-4 text-gray-400 text-sm">
-                    <span class="font-bold text-white uppercase">Bởi Ban Biên Tập</span>
+                    <span class="font-bold text-blue-500 uppercase">Tác giả: {{ $article['author'] }}</span>
                     <span>•</span>
-                    <span>12 tháng 4, 2026</span>
                 </div>
             </header>
 
+
             <div class="rounded-3xl overflow-hidden mb-12 shadow-2xl">
-                <img src="images/news_hero.jpg" class="w-full h-auto">
+                <img src="{{ asset($article['thumbnail']) }}" class="w-full h-auto object-cover">
             </div>
 
             <div class="prose prose-invert prose-lg max-w-none text-gray-300 leading-relaxed">
-                <p class="mb-6 text-xl text-white font-medium">
-                    Đây là đoạn tóm tắt nội dung bài viết. Nó thường có font chữ lớn hơn một chút để dẫn dắt người đọc.
-                </p>
-                <p class="mb-6">
-                    Kỉ niệm lần đầu ra mắt trang web của tôi, chúng tôi không chỉ mang đến những trò chơi đỉnh cao mà
-                    còn là những trải nghiệm cộng đồng khó quên. Như đã hứa, 10 hộp khô gà sẽ dành tặng cho những "chiến
-                    thần" mua game sớm nhất.
-                </p>
-                <h2 class="text-2xl font-bold text-white mt-10 mb-4">Cảm hứng từ những thập niên cũ</h2>
-                <p class="mb-6">
-                    Nội dung chi tiết của bài viết sẽ được trình bày ở đây. Bạn có thể chèn thêm ảnh, video hoặc các
-                    blockquote để bài viết thêm sinh động.
-                </p>
-                <blockquote class="border-l-4 border-blue-500 pl-6 my-10 italic text-2xl text-white">
-                    "Chúng tôi muốn tạo ra một không gian nơi game thủ không chỉ chơi, mà còn sống trong kỉ niệm."
-                </blockquote>
-            </div>
 
-            <div class="mt-16 pt-8 border-t border-gray-800 flex justify-between items-center">
-                <div class="flex gap-4">
-                    <button class="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition">Share FB</button>
-                    <button class="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition">Share X</button>
-                </div>
-                <a href="/news" class="text-sm font-bold uppercase tracking-widest hover:underline">Quay lại tin tức</a>
+
+                <p class="mb-8 text-xl text-white font-medium italic border-l-4 border-blue-600 pl-6">
+                    {{ $article['summary'] }}
+                </p>
+
+                @foreach($article['content'] as $block)
+                    @if($block['type'] === 'text')
+                        <p class="mb-6">
+                            {!! nl2br(e($block['data'])) !!}
+                        </p>
+                    @elseif($block['type'] === 'image')
+                        <div class="my-10">
+                            <img src="{{ asset($block['data']) }}" class="rounded-2xl w-full shadow-lg border border-gray-800"
+                                alt="{{ $article['title'] }}">
+                            @if(isset($block['caption']))
+                                <p class="text-center text-sm text-gray-500 mt-2 italic">{{ $block['caption'] }}</p>
+                            @endif
+                        </div>
+                    @endif
+                @endforeach
             </div>
 
         </article>

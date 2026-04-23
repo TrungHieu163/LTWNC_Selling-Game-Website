@@ -199,6 +199,40 @@
             </div>
         </div>
 
+        <div class="mt-20 bg-transparent">
+            <a href="{{ route('news.index') }}" class="inline-flex items-center gap-2 mb-8 text-white group">
+                <h2 class="text-2xl font-bold group-hover:text-gray-400 transition">Tin tức nổi bật</h2>
+                <span class="text-2xl text-gray-500 group-hover:text-white transition">›</span>
+            </a>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach($homeNews as $item)
+                    <a href="{{ route('news.show', $item['id']) }}" class="group block">
+                        <div class="relative overflow-hidden rounded-2xl aspect-video mb-5 bg-[#1a1a1a]">
+                            <img src="{{ asset($item['thumbnail']) }}"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+
+                        <div class="flex flex-col">
+                            <h3
+                                class="text-white text-xl font-bold mb-3 group-hover:text-gray-300 transition min-h-[3.5rem] line-clamp-2">
+                                {{ $item['title'] }}
+                            </h3>
+
+                            <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 min-h-[4.5rem]">
+                                {{ $item['summary'] }}
+                            </p>
+
+                            <span
+                                class="text-white text-sm font-bold border-b-2 border-transparent group-hover:border-white transition-all pb-1 uppercase tracking-wider w-fit mt-4">
+                                Đọc thêm
+                            </span>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+
         <div class="mt-20">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-white text-2xl font-bold">Trò chơi miễn phí</h2>

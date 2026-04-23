@@ -5,18 +5,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\NewsController;
 
-// SỬA: Thay vì trả về view('welcome') trống, gọi Controller để lấy dữ liệu Game cho trang chủ
 Route::get('/', [GameController::class, 'homeView'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // SỬA: Route dashboard cũng phải gọi homeView để có dữ liệu $bannerGames
     Route::get('/dashboard', function () {
         if (auth()->user()->hasRole('admin')) {
             return redirect()->intended('/admin');
         }
-        // Gọi trực tiếp method từ Controller để lấy data cho trang dashboard
         return app(GameController::class)->homeView();
     })->name('dashboard');
 
@@ -25,13 +23,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/giohang', [CartController::class, 'index'])->name('giohang');
 
-    Route::get('/tin-tuc', function () {
-        return view('news.index');
-    })->name('news.index');
 
-    Route::get('/tin-tuc/chi-tiet', function () {
-        return view('news.show');
-    })->name('news.show');
+    Route::prefix('tin-tuc')->group(function () {
+        Route::get('/', [NewsController::class, 'index'])->name('news.index');
+        Route::get('/{id}', [NewsController::class, 'show'])->name('news.show');
+    });
+
 
     Route::get('/inventory', [GameController::class, 'indexView'])->name('inventory');
 

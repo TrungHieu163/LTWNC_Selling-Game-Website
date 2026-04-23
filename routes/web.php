@@ -6,17 +6,18 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// SỬA: Thay vì trả về view('welcome') trống, gọi Controller để lấy dữ liệu Game cho trang chủ
+Route::get('/', [GameController::class, 'homeView'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // SỬA: Route dashboard cũng phải gọi homeView để có dữ liệu $bannerGames
     Route::get('/dashboard', function () {
         if (auth()->user()->hasRole('admin')) {
             return redirect()->intended('/admin');
         }
-        return view('dashboard');
+        // Gọi trực tiếp method từ Controller để lấy data cho trang dashboard
+        return app(GameController::class)->homeView();
     })->name('dashboard');
 
     Route::get('/search', [GameController::class, 'searchView'])->name('search');
@@ -43,7 +44,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/checkout-view', [OrderController::class, 'checkoutView'])->name('checkout.view');
     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
-    //Route::post('/payos-webhook', [OrderController::class, 'handlePayOSWebhook']);
 
     Route::get('/api/my-orders', [OrderController::class, 'myOrders']);
     Route::get('/api/my-orders/{id}', [OrderController::class, 'showOrder']);
@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/my-orders/{id}/{game_id?}', [OrderController::class, 'showOrderView'])->name('keys');
 
     Route::get('/library', [OrderController::class, 'myLibraryView'])->name('library');
+
 });
 
 Route::get('/api/games', [GameController::class, 'index']);
@@ -59,6 +60,6 @@ Route::get('/api/games/{id}', [GameController::class, 'show']);
 Route::get('/games/{id}', [GameController::class, 'showView'])->name('games.show');
 
 Route::post('/payos-webhook', [OrderController::class, 'handlePayOSWebhook'])
-     ->withoutMiddleware(['web', 'auth', 'csrf']);
+    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class, 'web', 'auth', 'csrf']);
 
 require __DIR__ . '/auth.php';

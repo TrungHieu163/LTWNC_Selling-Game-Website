@@ -28,7 +28,8 @@
             </div>
             <button class="text-gray-500 hover:text-white transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
                 </svg>
             </button>
         </div>
@@ -43,11 +44,10 @@
                     <div x-data="{ activeMedia: '{{ $game->trailer_url ? 'video' : 'image1' }}' }" class="space-y-6">
                         <div class="aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
                             @if($game->trailer_url)
-                                <template x-if="activeMedia === 'video'">
-                                    <iframe class="w-full h-full" 
-                                            src="https://www.youtube.com/embed/{{$game->youtube_id}}"
-                                            frameborder="0" allowfullscreen></iframe>
-                                </template>
+                            <template x-if="activeMedia === 'video'">
+                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/{{$game->youtube_id}}"
+                                    frameborder="0" allowfullscreen></iframe>
+                            </template>
                             @endif
                             <template x-if="activeMedia === 'image1'">
                                 <img src="{{ Storage::url($game->image) }}" class="w-full h-full object-cover">
@@ -56,11 +56,11 @@
 
                         <div class="flex justify-center items-center gap-4 py-2 border-t border-gray-800">
                             @if($game->trailer_url)
-                                <button @click="activeMedia = 'video'"
-                                    class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition flex items-center justify-center overflow-hidden hover:scale-105"
-                                    :class="activeMedia === 'video' ? 'border-blue-500' : 'border-gray-700'">
-                                    <span class="text-xs text-white font-bold uppercase tracking-wider">Trailer</span>
-                                </button>
+                            <button @click="activeMedia = 'video'"
+                                class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition flex items-center justify-center overflow-hidden hover:scale-105"
+                                :class="activeMedia === 'video' ? 'border-blue-500' : 'border-gray-700'">
+                                <span class="text-xs text-white font-bold uppercase tracking-wider">Trailer</span>
+                            </button>
                             @endif
 
                             <button @click="activeMedia = 'image1'"
@@ -76,25 +76,30 @@
                         <h2 class="text-2xl font-bold text-white mb-4 italic">GIỚI THIỆU TRÒ CHƠI</h2>
                         <div class="leading-relaxed text-lg prose prose-invert max-w-none">
                             {{-- Sử dụng phần intro trong description hoặc hiển thị mặc định --}}
-                            {!! nl2br(e($game->description['intro'] ?? 'Thông tin giới thiệu về trò chơi đang được cập nhật.')) !!}
+                            {!! nl2br(e($game->description['intro'] ?? 'Thông tin giới thiệu về trò chơi đang được cập
+                            nhật.')) !!}
                         </div>
                     </div>
 
                     {{-- Thể loại & Nổi bật --}}
                     <div class="grid grid-cols-2 gap-8 py-6 border-t border-gray-800">
                         <div>
-                            <span class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest italic">Thể loại</span>
+                            <span
+                                class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest italic">Thể
+                                loại</span>
                             <div class="flex flex-wrap gap-4 font-medium text-sm">
                                 @foreach($game->categories as $category)
-                                    <a href="{{ route('search', ['category_id' => $category->id]) }}"
-                                       class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">
-                                        {{ $category->name }}
-                                    </a>
+                                <a href="{{ route('search', ['category_id' => $category->id]) }}"
+                                    class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">
+                                    {{ $category->name }}
+                                </a>
                                 @endforeach
                             </div>
                         </div>
                         <div class="border-l border-gray-800 pl-8">
-                            <span class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest italic">Tính năng</span>
+                            <span
+                                class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest italic">Tính
+                                năng</span>
                             <div class="flex flex-wrap gap-4 font-medium text-sm text-white">
                                 {{ $game->description['features'] ?? 'Chơi đơn' }}
                             </div>
@@ -102,28 +107,131 @@
                     </div>
 
                     {{-- Yêu cầu hệ thống --}}
-                    <div class="bg-gray-900/30 p-8 rounded-xl border border-gray-800">
-                        <h2 class="text-xl font-bold text-white mb-8 uppercase tracking-tighter italic">Yêu cầu hệ thống</h2>
-                        <div class="grid md:grid-cols-2 gap-12">
-                            {{-- Cấu hình tối thiểu --}}
-                            <div class="space-y-4">
-                                <h3 class="text-gray-500 uppercase text-xs font-black mb-4 border-b border-gray-800 pb-2 italic">Tối thiểu</h3>
-                                <ul class="space-y-4 text-sm">
-                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">HĐH</span> <span class="font-bold">{{ $game->description['min_os'] ?? 'Windows 10 64-bit' }}</span></li>
-                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">CPU</span> <span class="font-bold">{{ $game->description['min_cpu'] ?? 'Intel Core i5' }}</span></li>
-                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">RAM</span> <span class="font-bold">{{ $game->description['min_ram'] ?? '8 GB' }}</span></li>
-                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">Đồ họa</span> <span class="font-bold">{{ $game->description['min_gpu'] ?? 'NVIDIA GTX 1050' }}</span></li>
-                                </ul>
+                    {{-- Yêu cầu hệ thống --}}
+                    <div class="mt-16 border-t border-gray-800 pt-12">
+                        <div class="flex items-center gap-4 mb-10">
+                            <h2 class="text-3xl font-bold text-white tracking-tight">Yêu cầu Hệ Thống</h2>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-3 gap-0 border border-gray-800 rounded-xl overflow-hidden shadow-2xl">
+
+                            <div class="bg-[#1a1a1a]/50 flex flex-col">
+                                <div
+                                    class="p-6 bg-gradient-to-b from-red-900/40 to-transparent border-b border-gray-800">
+                                    <h3 class="text-white font-bold text-lg mb-1">Cấu Hình Tối Thiểu</h3>
+                                    <div class="text-3xl font-black text-white mt-4">30 FPS</div>
+                                </div>
+                                <div class="p-6 space-y-6 flex-grow bg-[#161616]">
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">OS</span> <span
+                                            class="text-sm font-bold text-gray-300">{{ $game->description['min_os'] ?? 'Windows 10 (Build 17134+)' }}</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">KIẾN TRÚC HỆ
+                                            ĐIỀU HÀNH</span> <span class="text-sm font-bold text-gray-300">x64</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">CPU</span> <span
+                                            class="text-sm font-bold text-gray-300">{{ $game->description['min_cpu'] ?? 'Intel Core 2 Duo E8400' }}</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">GPU</span> <span
+                                            class="text-sm font-bold text-gray-300">{{ $game->description['min_gpu'] ?? 'NVIDIA GeForce GT 420M' }}</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">TÍNH NĂNG
+                                            GPU</span> <span class="text-sm font-bold text-gray-300">DirectX 11, Shader
+                                            Model 5.0</span></div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">VRAM</span>
+                                        <span class="text-sm font-bold text-gray-300">512MB</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">Ổ CỨNG
+                                            TRỐNG</span> <span class="text-sm font-bold text-gray-300">40GB</span></div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">RAM</span> <span
+                                            class="text-sm font-bold text-gray-300">{{ $game->description['min_ram'] ?? '4GB' }}</span>
+                                    </div>
+                                </div>
                             </div>
-                            {{-- Cấu hình khuyến nghị --}}
-                            <div class="space-y-4">
-                                <h3 class="text-gray-500 uppercase text-xs font-black mb-4 border-b border-gray-800 pb-2 italic">Khuyến nghị</h3>
-                                <ul class="space-y-4 text-sm">
-                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">HĐH</span> <span class="font-bold">{{ $game->description['rec_os'] ?? 'Windows 11 64-bit' }}</span></li>
-                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">CPU</span> <span class="font-bold">{{ $game->description['rec_cpu'] ?? 'Intel Core i7' }}</span></li>
-                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">RAM</span> <span class="font-bold">{{ $game->description['rec_ram'] ?? '16 GB' }}</span></li>
-                                    <li class="flex flex-col"><span class="text-gray-500 text-[11px] uppercase">Đồ họa</span> <span class="font-bold">{{ $game->description['rec_gpu'] ?? 'NVIDIA RTX 2060' }}</span></li>
-                                </ul>
+
+                            <div class="bg-[#1a1a1a] flex flex-col border-x border-gray-800">
+                                <div class="p-6 bg-red-600/80 border-b border-gray-800">
+                                    <h3 class="text-white font-bold text-lg mb-1">Cấu Hình Khuyến Nghị</h3>
+                                    <div class="text-3xl font-black text-white mt-4">60 FPS</div>
+                                </div>
+                                <div class="p-6 space-y-6 flex-grow">
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">OS</span> <span
+                                            class="text-sm font-bold text-gray-300">{{ $game->description['rec_os'] ?? 'Windows 10 / Windows 11' }}</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">KIẾN TRÚC HỆ
+                                            ĐIỀU HÀNH</span> <span class="text-sm font-bold text-gray-300">x64</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">CPU</span> <span
+                                            class="text-sm font-bold text-gray-300">{{ $game->description['rec_cpu'] ?? 'Intel Core i3-4150' }}</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">GPU</span> <span
+                                            class="text-sm font-bold text-gray-300">{{ $game->description['rec_gpu'] ?? 'NVIDIA GeForce GT 730' }}</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">TÍNH NĂNG
+                                            GPU</span> <span class="text-sm font-bold text-gray-300">DirectX 11, Shader
+                                            Model 5.0</span></div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">VRAM</span>
+                                        <span class="text-sm font-bold text-gray-300">2GB</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">Ổ CỨNG
+                                            TRỐNG</span> <span class="text-sm font-bold text-gray-300">40GB</span></div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">RAM</span> <span
+                                            class="text-sm font-bold text-gray-300">{{ $game->description['rec_ram'] ?? '8GB' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-[#1a1a1a]/50 flex flex-col">
+                                <div class="p-6 bg-red-500/90 border-b border-gray-800">
+                                    <h3 class="text-white font-bold text-lg mb-1">Cấu Hình Cao</h3>
+                                    <div class="text-3xl font-black text-white mt-4">144+ FPS</div>
+                                </div>
+                                <div class="p-6 space-y-6 flex-grow bg-[#161616]">
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">OS</span> <span
+                                            class="text-sm font-bold text-gray-300">Windows 10 / Windows 11</span></div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">KIẾN TRÚC HỆ
+                                            ĐIỀU HÀNH</span> <span class="text-sm font-bold text-gray-300">x64</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">CPU</span> <span
+                                            class="text-sm font-bold text-gray-300">Intel Core i5-9400F</span></div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">GPU</span> <span
+                                            class="text-sm font-bold text-gray-300">NVIDIA GeForce GTX 1050 Ti</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">TÍNH NĂNG
+                                            GPU</span> <span class="text-sm font-bold text-gray-300">DirectX 11, Shader
+                                            Model 5.0</span></div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">VRAM</span>
+                                        <span class="text-sm font-bold text-gray-300">6GB</span>
+                                    </div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">Ổ CỨNG
+                                            TRỐNG</span> <span class="text-sm font-bold text-gray-300">40GB</span></div>
+                                    <div class="flex flex-col"><span
+                                            class="text-gray-500 text-[11px] font-black uppercase mb-1">RAM</span> <span
+                                            class="text-sm font-bold text-gray-300">16GB</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -131,7 +239,8 @@
 
                 {{-- Sidebar: Giá và Mua hàng --}}
                 <div class="lg:col-span-1">
-                    <div class="sticky top-10 bg-[#1a1a1a] p-8 rounded-xl border border-gray-800 shadow-2xl overflow-hidden relative">
+                    <div
+                        class="sticky top-10 bg-[#1a1a1a] p-8 rounded-xl border border-gray-800 shadow-2xl overflow-hidden relative">
                         <div class="absolute -top-4 -right-4 opacity-5 pointer-events-none">
                             <svg class="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 0L1.5 6v12L12 24l10.5-6V6L12 0z" />
@@ -139,15 +248,16 @@
                         </div>
 
                         <h1 class="text-4xl font-black text-white mb-2 tracking-tighter">{{ $game->name }}</h1>
-                        <div class="inline-block bg-gray-800 px-2 py-1 rounded text-[10px] font-bold uppercase mb-6 tracking-widest text-gray-400 italic">
+                        <div
+                            class="inline-block bg-gray-800 px-2 py-1 rounded text-[10px] font-bold uppercase mb-6 tracking-widest text-gray-400 italic">
                             Bản Quyền Chính Thức
                         </div>
 
                         <div class="text-3xl font-black text-white mb-8">
                             @if($game->price > 0)
-                                {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                            {{ number_format($game->price, 0, ',', '.') }} VNĐ
                             @else
-                                <span class="text-green-500 uppercase tracking-wider">Miễn phí</span>
+                            <span class="text-green-500 uppercase tracking-wider">Miễn phí</span>
                             @endif
                         </div>
 
@@ -163,13 +273,15 @@
                             </form>
 
                             {{-- Nút thêm vào giỏ hàng qua AJAX/Dispatch --}}
-                            <form action="{{ route('cart.add', $game->id) }}" method="POST" 
-                                  @submit.prevent="fetch($el.action, { method: 'POST', body: new FormData($el), headers: { 'X-Requested-With': 'XMLHttpRequest' } }).then(() => $dispatch('add-to-cart'))">
+                            <form action="{{ route('cart.add', $game->id) }}" method="POST"
+                                @submit.prevent="fetch($el.action, { method: 'POST', body: new FormData($el), headers: { 'X-Requested-With': 'XMLHttpRequest' } }).then(() => $dispatch('add-to-cart'))">
                                 @csrf
                                 <button type="submit"
                                     class="w-full text-white border border-gray-700 hover:bg-gray-800 font-bold py-4 px-4 rounded transition uppercase text-xs tracking-widest flex items-center justify-center gap-3 group active:scale-95">
-                                    <svg class="w-5 h-5 group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                    <svg class="w-5 h-5 group-hover:scale-110 transition" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4"></path>
                                     </svg>
                                     Thêm vào giỏ hàng
                                 </button>
@@ -179,15 +291,18 @@
                         <div class="mt-10 space-y-4 border-t border-gray-800 pt-8">
                             <div class="flex justify-between text-[13px]">
                                 <span class="text-gray-500 font-medium italic">Nhà phát triển</span>
-                                <span class="text-white font-bold underline decoration-gray-700 underline-offset-4">{{ $game->description['developer'] ?? 'Đang cập nhật' }}</span>
+                                <span
+                                    class="text-white font-bold underline decoration-gray-700 underline-offset-4">{{ $game->description['developer'] ?? 'Đang cập nhật' }}</span>
                             </div>
                             <div class="flex justify-between text-[13px]">
                                 <span class="text-gray-500 font-medium italic">Nhà phát hành</span>
-                                <span class="text-white font-bold underline decoration-gray-700 underline-offset-4">{{ $game->description['publisher'] ?? 'Youthink Store' }}</span>
+                                <span
+                                    class="text-white font-bold underline decoration-gray-700 underline-offset-4">{{ $game->description['publisher'] ?? 'Youthink Store' }}</span>
                             </div>
                             <div class="flex justify-between text-[13px]">
                                 <span class="text-gray-500 font-medium italic">Ngày phát hành</span>
-                                <span class="text-white font-bold italic">{{ isset($game->description['released_at']) ? \Carbon\Carbon::parse($game->description['released_at'])->format('d/m/Y') : $game->created_at->format('d/m/Y')}}</span>                            
+                                <span
+                                    class="text-white font-bold italic">{{ isset($game->description['released_at']) ? \Carbon\Carbon::parse($game->description['released_at'])->format('d/m/Y') : $game->created_at->format('d/m/Y')}}</span>
                             </div>
                         </div>
                     </div>
@@ -198,11 +313,29 @@
     </div>
 
     <style>
-    [x-cloak] { display: none !important; }
-    body { background-color: #121212; }
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #121212; }
-    ::-webkit-scrollbar-thumb { background: #252525; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #303030; }
+    [x-cloak] {
+        display: none !important;
+    }
+
+    body {
+        background-color: #121212;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #121212;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #252525;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #303030;
+    }
     </style>
 </x-app-layout>

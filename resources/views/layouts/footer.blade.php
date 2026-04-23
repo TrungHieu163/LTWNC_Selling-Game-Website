@@ -50,27 +50,35 @@
             <!-- Cột 3: Liên kết (Logo không nền, không viền) -->
             <div>
                 <h3 class="text-white font-semibold text-lg mb-5 uppercase tracking-wider">Liên kết</h3>
-                <div class="flex flex-col gap-3 items-start">
+                <div class="flex flex-col gap-3 w-fit">
+
                     <a href="https://discord.com/invite/mixigaming" target="_blank"
-                        class="group flex items-center gap-3 p-2 pr-4 bg-gray-800/50 rounded-xl hover:bg-indigo-600 transition-all duration-300 w-auto">
-                        <img src="{{ asset('images/discord.png') }}" alt="Discord"
-                            class="h-7 w-7 object-contain bg-transparent brightness-100 group-hover:brightness-125 transition-all">
+                        class="group flex items-center gap-3 p-2 pr-5 bg-gray-800/50 rounded-xl hover:bg-indigo-600 transition-all duration-300 min-w-[160px]">
+                        <div class="w-7 h-7 flex items-center justify-center">
+                            <img src="{{ asset('images/discord.png') }}" alt="Discord"
+                                class="h-full w-full object-contain brightness-100 group-hover:brightness-125 transition-all">
+                        </div>
                         <span class="text-gray-300 group-hover:text-white text-sm font-medium">Discord</span>
                     </a>
 
                     <a href="https://www.youtube.com/@MixiGaming3con" target="_blank"
-                        class="group flex items-center gap-3 p-2 pr-4 bg-gray-800/50 rounded-xl hover:bg-red-600 transition-all duration-300 w-auto">
-                        <img src="{{ asset('images/youtube.png') }}" alt="YouTube"
-                            class="h-7 w-7 object-contain bg-transparent brightness-100 group-hover:brightness-125 transition-all">
+                        class="group flex items-center gap-3 p-2 pr-5 bg-gray-800/50 rounded-xl hover:bg-red-600 transition-all duration-300 min-w-[160px]">
+                        <div class="w-7 h-7 flex items-center justify-center">
+                            <img src="{{ asset('images/youtube.png') }}" alt="YouTube"
+                                class="h-full w-full object-contain brightness-100 group-hover:brightness-125 transition-all">
+                        </div>
                         <span class="text-gray-300 group-hover:text-white text-sm font-medium">YouTube</span>
                     </a>
 
                     <a href="https://web.facebook.com/MixiGaming/?_rdc=1&_rdr#" target="_blank"
-                        class="group flex items-center gap-3 p-2 pr-4 bg-gray-800/50 rounded-xl hover:bg-blue-600 transition-all duration-300 w-auto">
-                        <img src="{{ asset('images/facebook.png') }}" alt="Facebook"
-                            class="h-7 w-7 object-contain bg-transparent brightness-100 group-hover:brightness-125 transition-all">
+                        class="group flex items-center gap-3 p-2 pr-5 bg-gray-800/50 rounded-xl hover:bg-blue-600 transition-all duration-300 min-w-[160px]">
+                        <div class="w-7 h-7 flex items-center justify-center">
+                            <img src="{{ asset('images/facebook.png') }}" alt="Facebook"
+                                class="h-full w-full object-contain brightness-100 group-hover:brightness-125 transition-all">
+                        </div>
                         <span class="text-gray-300 group-hover:text-white text-sm font-medium">Facebook</span>
                     </a>
+
                 </div>
             </div>
 

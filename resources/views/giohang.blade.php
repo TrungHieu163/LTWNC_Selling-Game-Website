@@ -27,9 +27,9 @@
                             @endphp
                             
                             <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 flex items-center gap-6 group hover:bg-[#202020] transition">
-                                <div class="w-24 h-32 flex-shrink-0 overflow-hidden rounded shadow-md">
-                                    <img src="{{ asset('storage/images/' . ($details['image'] ?? '')) }}"
-                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                <div class="w-48 aspect-video flex-shrink-0 overflow-hidden rounded-lg shadow-md border border-gray-800">
+                                    <img src="{{ asset(Storage::url($details['image'] ?? '')) }}"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500 "
                                          onerror="this.src='https://via.placeholder.com/150x200'">
                                 </div>
 

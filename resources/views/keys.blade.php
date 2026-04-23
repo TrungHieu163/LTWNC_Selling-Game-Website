@@ -1,10 +1,46 @@
 <x-app-layout>
-    <div class="py-12 bg-[#121212] min-h-screen text-white" x-data="{ 
+    <div class="py-12 bg-[#121212] min-h-screen text-white" 
+     x-data="{ 
+        showToast: false, 
+        timeout: null,
         copyToClipboard(text) {
             navigator.clipboard.writeText(text);
-            alert('Đã sao chép mã Key!');
+            this.showToast = true;
+            if (this.timeout) clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => { this.showToast = false }, 2500); 
         }
-    }">
+     }">
+     <div x-show="showToast" 
+        x-cloak
+        class="fixed top-24 right-6 z-[100]"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-x-full" 
+        x-transition:enter-end="opacity-100 translate-x-0"
+        x-transition:leave="transition ease-in duration-200" 
+        x-transition:leave-start="opacity-100 translate-x-0"
+        x-transition:leave-end="opacity-0 translate-x-full">
+
+    <div @click="showToast = false"
+         class="bg-[#202020] border-l-4 border-blue-500 p-4 rounded shadow-2xl cursor-pointer flex items-center gap-4 min-w-[320px] hover:bg-[#252525] transition border border-gray-800">
+
+        <div class="bg-blue-500/20 p-2 rounded">
+            <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+
+        <div class="flex-grow">
+            <p class="text-white font-bold text-sm">Đã sao chép mã kích hoạt!</p>
+        </div>
+
+        <button class="text-gray-500 hover:text-white transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+</div>
+
         <div class="max-w-4xl mx-auto px-6">
             {{-- Điều hướng quay lại thư viện --}}
             <a href="{{ route('library') }}" class="inline-flex items-center text-gray-500 hover:text-blue-500 transition mb-8 group">
@@ -34,8 +70,8 @@
                         <div class="flex flex-col md:flex-row items-center gap-8 p-6 bg-[#202020] rounded-2xl border border-gray-800 hover:border-blue-500/30 transition">
                             
                             {{-- Poster Game --}}
-                            <div class="w-28 aspect-[3/4] flex-shrink-0 rounded-lg overflow-hidden shadow-lg border border-gray-700">
-                                <img src="{{ $key->game->image ? asset('storage/' . $key->game->image) : 'https://via.placeholder.com/150x200' }}" 
+                            <div class="w-48 md:w-64 aspect-video flex-shrink-0 rounded-xl overflow-hidden shadow-2xl border border-gray-700">
+                                <img src="{{ $key->game->image ? Storage::url($key->game->image) : 'https://via.placeholder.com/150x200' }}" 
                                      class="w-full h-full object-cover" 
                                      alt="{{ $key->game->name }}">
                             </div>

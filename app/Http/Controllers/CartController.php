@@ -28,7 +28,7 @@ class CartController extends Controller
                 "name" => $game->name,
                 "quantity" => 1,
                 "price" => $game->price,
-                "image" => $game->image
+                "image" => str_contains($game->image, 'images/') ? $game->image : 'images/' . $game->image
             ];
         }
 

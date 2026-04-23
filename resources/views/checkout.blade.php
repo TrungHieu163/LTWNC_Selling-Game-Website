@@ -1,63 +1,103 @@
-<x-guest-layout>
-    <div class="min-h-[80vh] flex flex-col sm:justify-center items-center pt-4 sm:pt-0 bg-gray-100">
-        <div class="w-full sm:max-w-2xl px-8 py-6 bg-white shadow-lg overflow-hidden sm:rounded-xl border border-gray-200">
+<x-app-layout> {{-- Chuyển sang app-layout để dùng nền tối đồng bộ --}}
+    <div class="min-h-screen flex items-center justify-center py-12 bg-[#121212] px-4">
+        <div class="w-full max-w-2xl">
+            
+            {{-- Nút quay lại nhanh --}}
+            <a href="{{ route('giohang') }}" class="inline-flex items-center text-gray-500 hover:text-white transition mb-6 group text-sm">
+                <svg class="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Quay lại chỉnh sửa giỏ hàng
+            </a>
 
-            <div class="text-center mb-6">
-                <h2 class="text-xl font-bold text-gray-800 uppercase tracking-tight">Xác nhận thanh toán</h2>
-                <p class="text-gray-500 text-sm">Vui lòng kiểm tra lại số tiền trước khi tiếp tục</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t border-b border-gray-100 py-6">
-                <div class="flex flex-col items-center p-6 bg-green-50 rounded-lg border border-green-100">
-                    <div class="bg-white p-3 rounded-xl shadow-sm mb-3">
-                        <img src="https://payos.vn/wp-content/uploads/2023/07/Logo-PayOS.svg" 
-                             alt="PayOS Logo" class="w-32 h-12 object-contain">
+            <div class="bg-[#1a1a1a] border border-gray-800 rounded-[2rem] overflow-hidden shadow-2xl">
+                
+                {{-- Header --}}
+                <div class="p-8 text-center border-b border-gray-800 bg-gradient-to-b from-blue-600/10 to-transparent">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600/20 rounded-2xl mb-4 border border-blue-500/30">
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
                     </div>
-                    <div class="text-center">
-                        <span class="text-[12px] font-bold text-green-700 uppercase tracking-widest">Cổng thanh toán PayOS</span>
-                        <p class="text-[10px] text-green-600 mt-1">An toàn - Nhanh chóng - Tự động</p>
-                    </div>
+                    <h2 class="text-2xl font-black text-white uppercase tracking-tighter italic">Xác nhận thanh toán</h2>
+                    <p class="text-gray-500 text-sm mt-1">An toàn và bảo mật qua cổng kết nối PayOS</p>
                 </div>
 
-                <div class="flex flex-col justify-center space-y-5">
-                    <div class="text-center md:text-left">
-                        <p class="text-gray-500 text-xs uppercase font-semibold tracking-wider">Tổng cộng đơn hàng</p>
-                        <h3 class="text-3xl font-black text-blue-600">
-                            {{ number_format(session('total_price', 0)) }} 
-                            <span class="text-sm font-normal text-gray-400">VND</span>
-                        </h3>
+                <div class="p-8">
+                    <div class="flex flex-col items-center max-w-sm mx-auto space-y-8">
+                        
+                        {{-- Phần ảnh Brand --}}
+                        <div class="relative group w-full max-w-[240px]">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                            <div class="relative flex flex-col items-center p-8 bg-[#202020] rounded-2xl border border-gray-800">
+                                <img src="{{ asset('images/payos.png') }}"
+                                    alt="PayOS Logo" class="w-32 h-auto mb-4 brightness-110"
+                                    onerror="this.src='https://payos.vn/wp-content/uploads/2023/07/Logo-PayOS.svg'">
+                                <div class="h-px w-12 bg-gray-800 mb-4"></div>
+                                <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em]">Official Partner</span>
+                            </div>
+                        </div>
+
+                        {{-- Phần thông tin tiền và Nút bấm nằm dưới ảnh --}}
+                        <div class="w-full text-center space-y-6">
+                            <div>
+                                <p class="text-gray-500 text-[10px] uppercase font-bold tracking-[0.15em] mb-1">Tổng tiền thanh toán</p>
+                                <div class="flex items-baseline justify-center gap-2">
+                                    <span class="text-5xl font-black text-white tracking-tighter">
+                                        {{ number_format($total ?? session('total_price', 0)) }}
+                                    </span>
+                                    <span class="text-lg font-bold text-blue-500">VND</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-2">
+                                <button type="button" id="btn-payos"
+                                    class="w-full group relative flex justify-center items-center px-6 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black uppercase tracking-widest text-xs transition-all active:scale-95 shadow-xl shadow-blue-900/40 overflow-hidden">
+                                    <span class="relative z-10 flex items-center">
+                                        Thanh toán ngay 
+                                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                        </svg>
+                                    </span>
+                                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="flex flex-col space-y-3">
-                        <button type="button" id="btn-payos"
-                            class="w-full inline-flex justify-center items-center px-4 py-3 bg-blue-600 border border-transparent rounded-md font-bold text-white text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md active:scale-95">
-                            Thanh toán ngay qua PayOS
-                        </button>
-
-                        <a href="{{ route('giohang') }}"
-                            class="w-full inline-flex justify-center items-center px-4 py-2 bg-white border border-gray-200 rounded-md font-bold text-gray-400 text-[10px] uppercase tracking-widest hover:bg-gray-50 transition">
-                            Quay lại giỏ hàng
-                        </a>
+                    {{-- Chú ý bảo mật --}}
+                    <div class="mt-10 p-4 bg-blue-500/5 border border-blue-500/10 rounded-xl">
+                        <p class="text-[11px] text-gray-500 text-center leading-relaxed italic">
+                            Hệ thống sẽ chuyển hướng bạn đến trang thanh toán của <span class="text-blue-400 font-bold">PayOS</span>. 
+                            Vui lòng không tắt trình duyệt cho đến khi giao dịch được xác nhận thành công.
+                        </p>
                     </div>
                 </div>
             </div>
-
-            <p class="mt-6 text-[11px] text-center text-gray-400 italic leading-relaxed">
-                * Sau khi nhấn "Thanh toán ngay", bạn sẽ được chuyển hướng đến trang quét mã VietQR chính thức của PayOS. 
-                Đơn hàng sẽ được tự động xử lý ngay sau khi chuyển khoản thành công.
-            </p>
         </div>
     </div>
+
+    <style>
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+    </style>
 
     <script>
         document.getElementById('btn-payos').addEventListener('click', function() {
             const btn = this;
-            const originalText = btn.innerText;
+            const originalContent = btn.innerHTML;
             
-            // Hiệu ứng loading
-            btn.innerText = 'ĐANG KHỞI TẠO GD...';
+            btn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                ĐANG XỬ LÝ...
+            `;
             btn.disabled = true;
-            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
 
             fetch("{{ route('checkout') }}", {
                 method: "POST",
@@ -69,7 +109,6 @@
             .then(async response => {
                 const data = await response.json();
                 if (response.ok && data.checkoutUrl) {
-                    // Chuyển hướng sang PayOS
                     window.location.href = data.checkoutUrl;
                 } else {
                     throw new Error(data.error || "Không thể tạo link thanh toán");
@@ -78,12 +117,10 @@
             .catch(error => {
                 console.error("Error:", error);
                 alert("Lỗi: " + error.message);
-                
-                // Khôi phục nút bấm nếu lỗi
-                btn.innerText = originalText;
+                btn.innerHTML = originalContent;
                 btn.disabled = false;
-                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
             });
         });
     </script>
-</x-guest-layout>
+</x-app-layout>

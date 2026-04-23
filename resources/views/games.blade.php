@@ -50,7 +50,7 @@
                                 </template>
                             @endif
                             <template x-if="activeMedia === 'image1'">
-                                <img src="{{ asset('storage/images/' . $game->image) }}" class="w-full h-full object-cover">
+                                <img src="{{ Storage::url($game->image) }}" class="w-full h-full object-cover">
                             </template>
                         </div>
 
@@ -66,7 +66,7 @@
                             <button @click="activeMedia = 'image1'"
                                 class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition overflow-hidden hover:scale-105"
                                 :class="activeMedia === 'image1' ? 'border-blue-500' : 'border-gray-700'">
-                                <img src="{{ asset('storage/images/' . $game->image) }}" class="w-full h-full object-cover">
+                                <img src="{{ Storage::url($game->image) }}" class="w-full h-full object-cover">
                             </button>
                         </div>
                     </div>

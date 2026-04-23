@@ -15,7 +15,7 @@
 
                         <!-- Ảnh game -->
                         <div class="relative aspect-video bg-black overflow-hidden">
-                            <img src="{{ $item->game->image ? asset('storage/images/' . $item->game->image) : 'https://via.placeholder.com/600x338/1a1a1a/666666?text=No+Image' }}"
+                            <img src="{{ $item->game->image ? Storage::url($item->game->image) : 'https://via.placeholder.com/600x338/1a1a1a/666666?text=No+Image' }}"
                                 alt="{{ $item->game->name }}"
                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
 

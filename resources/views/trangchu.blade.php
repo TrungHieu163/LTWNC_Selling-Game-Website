@@ -300,7 +300,7 @@
                                     class="text-white font-semibold text-sm line-clamp-1 group-hover:text-blue-400 transition">
                                     {{ $game->name }}
                                 </h4>
-                                <p class="text-gray-400 text-xs mt-1">{{ number_format($game->price, 0, ',', '.') }} ₫</p>
+                                <p class="text-gray-400 text-xs mt-1">{{ $game->price == 0 ? 'Miễn phí' : number_format($game->price, 0, ',', '.') . ' ₫' }}</p>
                             </div>
                         </a>
                     @endforeach

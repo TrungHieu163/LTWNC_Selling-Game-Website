@@ -45,8 +45,14 @@
                                             </p>
                                         </div>
                                         <div class="text-right">
-                                            <div class="text-lg font-bold text-white">{{ number_format($price) }} VNĐ</div>
-                                            @if($qty > 1)
+                                            <div class="text-lg font-bold text-white">
+                                                @if($price > 0)
+                                                    {{ number_format($price) }} VNĐ
+                                                @else
+                                                    <span class="text-green-500">Miễn phí</span>
+                                                @endif
+                                            </div>
+                                            @if($qty > 1 && $price > 0)
                                                 <div class="text-xs text-blue-400 font-semibold mt-1">
                                                     Thành tiền: {{ number_format($subtotal) }} VNĐ
                                                 </div>
@@ -81,7 +87,13 @@
 
                         <div class="flex justify-between text-xl font-extrabold my-6">
                             <span>Tổng cộng</span>
-                            <span class="text-blue-500">{{ number_format($totalPrice) }} VNĐ</span>
+                            <span class="text-blue-500">
+                                @if($totalPrice > 0)
+                                    {{ number_format($totalPrice) }} VNĐ
+                                @else
+                                    Miễn phí
+                                @endif
+                            </span>
                         </div>
 
                         <a href="{{ route('checkout.view') }}" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-4 rounded transition uppercase tracking-widest shadow-lg">

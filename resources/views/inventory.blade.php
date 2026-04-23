@@ -33,7 +33,11 @@
                             </p>
                             <div class="mt-3 flex items-center justify-between">
                                 <span class="text-white font-black text-base">
-                                    {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                                    @if($game->price > 0)
+                                        {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                                    @else
+                                        <span class="text-green-500 uppercase">Miễn phí</span>
+                                    @endif
                                 </span>
                             </div>
                         </div>

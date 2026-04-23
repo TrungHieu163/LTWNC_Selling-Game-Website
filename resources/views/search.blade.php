@@ -51,7 +51,10 @@
                                         <img :src="'/storage/' + game.image" class="w-16 aspect-video object-cover rounded" onerror="this.src='https://via.placeholder.com/40x50'">
                                         <div>
                                             <div class="text-sm font-bold group-hover:text-blue-500" x-text="game.name"></div>
-                                            <div class="text-xs text-gray-400" x-text="new Intl.NumberFormat().format(game.price) + ' VNĐ'"></div>
+                                            <div class="text-xs" 
+                                                :class="game.price > 0 ? 'text-gray-400' : 'text-green-500 font-bold'"
+                                                x-text="game.price > 0 ? new Intl.NumberFormat().format(game.price) + ' VNĐ' : 'MIỄN PHÍ'">
+                                            </div>
                                         </div>
                                     </a>
                                 </template>
@@ -119,7 +122,13 @@
                                     onerror="this.src='https://via.placeholder.com/300x400'">
                             </div>
                             <h4 class="font-bold text-gray-200 group-hover:text-blue-500 transition line-clamp-1">{{ $game->name }}</h4>
-                            <p class="text-white mt-1">{{ number_format($game->price) }} VNĐ</p>
+                            <p class="text-white mt-1">
+                                @if($game->price > 0)
+                                    {{ number_format($game->price) }} VNĐ
+                                @else
+                                    <span class="text-green-500 font-bold uppercase text-sm">Miễn phí</span>
+                                @endif
+                            </p>
                         </a>
                     </div>
                     @empty

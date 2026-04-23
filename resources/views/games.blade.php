@@ -144,7 +144,11 @@
                         </div>
 
                         <div class="text-3xl font-black text-white mb-8">
-                            {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                            @if($game->price > 0)
+                                {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                            @else
+                                <span class="text-green-500 uppercase tracking-wider">Miễn phí</span>
+                            @endif
                         </div>
 
                         <div class="space-y-4">

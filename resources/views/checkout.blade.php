@@ -108,8 +108,20 @@
             })
             .then(async response => {
                 const data = await response.json();
-                if (response.ok && data.checkoutUrl) {
-                    window.location.href = data.checkoutUrl;
+                if (response.ok) {
+                    // Nếu là game miễn phí, chuyển hướng về Thư viện
+                    if (data.is_free) {
+                        const modal = document.getElementById('success-modal');
+                        document.getElementById('modal-message').innerText = data.message;
+                        modal.classList.remove('hidden');
+
+                        document.getElementById('btn-modal-redirect').onclick = function() {
+                            window.location.href = data.redirectUrl;
+                        };
+                    } else if (data.checkoutUrl) {
+                        // Nếu có phí, chuyển hướng sang PayOS
+                        window.location.href = data.checkoutUrl;
+                    }
                 } else {
                     throw new Error(data.error || "Không thể tạo link thanh toán");
                 }
@@ -123,4 +135,30 @@
             });
         });
     </script>
+    <div id="success-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity bg-black/80 backdrop-blur-sm"></div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen">​</span>
+
+        <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-[#1a1a1a] border border-gray-800 rounded-[2rem] shadow-2xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="p-8">
+                <div class="flex flex-col items-center text-center">
+                    <div class="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-green-500/20 border border-green-500/30">
+                        <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-black text-white uppercase italic mb-2" id="modal-title">Thành công!</h3>
+                    <p class="text-gray-400 mb-8" id="modal-message"></p>
+                    
+                    <button type="button" id="btn-modal-redirect"
+                        class="w-full px-6 py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-black uppercase tracking-widest text-xs transition-all active:scale-95 shadow-lg shadow-green-900/40">
+                        Đi tới thư viện ngay
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </x-app-layout>

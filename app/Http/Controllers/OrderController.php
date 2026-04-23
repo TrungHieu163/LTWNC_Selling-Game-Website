@@ -24,7 +24,7 @@ class OrderController extends Controller
         $user = auth()->user();
 
         try {
-            // 1. Lưu đơn hàng vào Database thông qua Transaction
+            // 1. Lưu đơn hàng vào Database
             $result = DB::transaction(function () use ($cart, $user) {
                 $order = Order::create([
                     'user_id'     => $user->id,
@@ -60,22 +60,53 @@ class OrderController extends Controller
                 }
 
                 $order->update(['total_price' => $total]);
-                return [$order, $payosItems];
+                return ['order' => $order, 'payosItems' => $payosItems, 'total' => $total];
             });
 
-            [$order, $payosItems] = $result;
+            $order = $result['order'];
+            $payosItems = $result['payosItems'];
+            $total = $result['total'];
 
-            // 2. Khởi tạo PayOS SDK để tự động tạo Signature
+            // 2. XỬ LÝ GAME MIỄN PHÍ
+            if ($total <= 0) {
+                DB::transaction(function () use ($order) {
+                    $order->load('items.game');
+
+                    foreach ($order->items as $item) {
+                        $game = $item->game;
+                        // Lấy key cho game miễn phí và đánh dấu đã bán
+                        $keys = $game->availableKeys()->limit($item->quantity)->get();
+
+                        foreach ($keys as $key) {
+                            $key->update(['is_sold' => true]);
+                            $order->gameKeys()->attach($key->id);
+                        }
+                    }
+
+                    // Hoàn tất đơn hàng ngay lập tức
+                    $order->update(['status' => 'completed']);
+                });
+
+                session()->forget('cart');
+
+                return response()->json([
+                    'success' => true,
+                    'is_free' => true,
+                    'message' => 'Game miễn phí đã được thêm vào thư viện của bạn!',
+                    'redirectUrl' => route('library') 
+                ]);
+            }
+
+            // 3. XỬ LÝ THANH TOÁN QUA PAYOS (Nếu số tiền > 0)
             $payOS = new PayOS(
                 config('payos.client_id'),
                 config('payos.api_key'),
                 config('payos.checksum_key')
             );
 
-            // 3. Chuẩn bị dữ liệu theo yêu cầu của SDK
             $data = [
                 'orderCode'   => intval($order->id),
-                'amount'      => intval($order->total_price),
+                'amount'      => intval($total),
                 'description' => 'Thanh toan don hang #' . $order->id,
                 'items'       => $payosItems,
                 'returnUrl'   => config('payos.return_url'),
@@ -85,28 +116,22 @@ class OrderController extends Controller
                 'buyerPhone'  => '0363636363',
             ];
 
-            // 4. Tạo link thanh toán qua SDK
             $response = $payOS->createPaymentLink($data);
 
             if (isset($response['checkoutUrl'])) {
                 session()->forget('cart');
                 return response()->json([
                     'success' => true,
+                    'is_free' => false,
                     'checkoutUrl' => $response['checkoutUrl']
                 ]);
             }
 
-            return response()->json([
-                'success' => false,
-                'error' => 'Không thể tạo link thanh toán từ PayOS'
-            ], 400);
+            return response()->json(['success' => false, 'error' => 'Lỗi tạo link thanh toán'], 400);
 
         } catch (\Exception $e) {
             Log::error('Checkout Error: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'error' => $e->getMessage()
-            ], 400);
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 400);
         }
     }
 

@@ -87,6 +87,11 @@ class GameController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
+        //Lọc game miễn phí
+        if ($request->has('price')) {
+            $query->where('price', $request->price);
+        }
+
         // Lọc theo danh mục
         if ($request->filled('category_id')) {
             $query->whereHas('categories', function ($q) use ($request) {

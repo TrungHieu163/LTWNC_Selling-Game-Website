@@ -88,11 +88,7 @@
                         <div class="flex justify-between text-xl font-extrabold my-6">
                             <span>Tổng cộng</span>
                             <span class="text-blue-500">
-                                @if($totalPrice > 0)
                                     {{ number_format($totalPrice) }} VNĐ
-                                @else
-                                    Miễn phí
-                                @endif
                             </span>
                         </div>
 

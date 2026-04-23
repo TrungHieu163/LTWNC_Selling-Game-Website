@@ -1,7 +1,7 @@
 # ĐỀ CƯƠNG: MIXIGAMING Shop
 
 ## 1. Giới thiệu
-MIXIGAMING Shop bán game cho phép người dùng tìm kiếm, mua và tải game online.
+MIXIGAMING Shop bán game cho phép người dùng tìm kiếm và mua online.
 
 ---
 
@@ -9,9 +9,10 @@ MIXIGAMING Shop bán game cho phép người dùng tìm kiếm, mua và tải ga
 
 ### Admin
 - Quản lý user
-- Quản lý danh mục game
+- Quản lý thể loại game
 - Quản lý game
 - Quản lý đơn hàng
+- Quản lý key game
 - Thống kê
 
 ### User
@@ -21,13 +22,15 @@ MIXIGAMING Shop bán game cho phép người dùng tìm kiếm, mua và tải ga
 - Giỏ hàng
 - Thanh toán
 - Quản lý tài khoản
+- Kho game đã mua
 
 ---
 
 ## 3. Công nghệ
 - Laravel (Breeze)
 - MySQL
-- HTML/CSS/JS
+- HTML/CSS (Tailwind)/JS
+- PayOS API
 
 ---
 

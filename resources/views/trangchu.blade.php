@@ -41,7 +41,7 @@
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent p-10 flex flex-col justify-end">
                             <h2 class="text-4xl lg:text-5xl font-bold text-white mb-3">{{ $game->name }}</h2>
-                            <p class="text-lg text-gray-300 max-w-md mb-8 line-clamp-2">{{ $game->description }}</p>
+                            <p class="text-lg text-gray-300 max-w-md mb-8 line-clamp-2">{{ is_array($game->description) ? implode(' ', $game->description) : $game->description }}</p>
                             <a href="{{ route('games.show', $game->id) }}"
                                 class="bg-white text-black px-10 py-4 rounded-2xl font-bold text-base hover:bg-gray-200 transition w-fit inline-block">
                                 Mua ngay
@@ -104,7 +104,7 @@
                                 <h3 class="text-white font-semibold group-hover:text-blue-400 transition">{{ $game->name }}
                                 </h3>
                                 <p class="text-emerald-400 text-sm font-medium">
-                                    {{ number_format($game->price, 0, ',', '.') }} ₫
+                                    {{ $game->price == 0 ? 'Miễn phí' : number_format($game->price, 0, ',', '.') . ' ₫' }}
                                 </p>
                             </a>
                         </div>
@@ -236,7 +236,7 @@
         <div class="mt-20">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-white text-2xl font-bold">Trò chơi miễn phí</h2>
-                <a href="{{ route('search', ['category_id' => 'free']) }}"
+                <a href="{{ route('search', ['price' => 0]) }}"
                     class="px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-xl transition border border-white/5">
                     Xem thêm
                 </a>
@@ -280,7 +280,7 @@
                                     class="text-white font-semibold text-sm line-clamp-1 group-hover:text-blue-400 transition">
                                     {{ $game->name }}
                                 </h4>
-                                <p class="text-gray-400 text-xs mt-1">{{ number_format($game->price, 0, ',', '.') }} ₫</p>
+                                <p class="text-gray-400 text-xs mt-1">{{ $game->price == 0 ? 'Miễn phí' : number_format($game->price, 0, ',', '.') . ' ₫' }}</p>
                             </div>
                         </a>
                     @endforeach

@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- 1. CHÈN FONT CHUẨN TIẾNG VIỆT VÀ FIX CỨNG CHIỀU CAO --}}
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
@@ -18,23 +17,35 @@
         }
     }
     </style>
-
     @php
-    // Xử lý dữ liệu
+    // 1. Lấy bài p12
     $p12 = collect($news)->firstWhere('id', 'p12');
     $others = collect($news)->where('id', '!=', 'p12');
 
-    // Carousel gồm p12 và 6 bài đầu
+    // 2. Các bài đã xuất hiện ở trên
     $carouselNews = collect([$p12])->merge($others->take(6))->filter();
-
-    // 6 bài tiếp theo cho Grid
     $gridNews = $others->slice(6, 6);
 
-    // Lọc tin theo TAG cho 3 cột cuối
+    // 3. Lọc tin theo TAG cho 3 cột phụ (vẫn giữ nguyên như cũ)
     $pcConsoleNews = collect($news)->filter(fn($item) => in_array('pc-console', $item['tags'] ?? []))->take(3);
     $devNews = collect($news)->filter(fn($item) => in_array('nguoi-lam-game', $item['tags'] ?? []))->take(3);
     $esportNews = collect($news)->filter(fn($item) => in_array('esports', $item['tags'] ?? []))->take(3);
+
+    // 4. LOGIC PHÂN TRANG CHO DANH SÁCH CÒN LẠI
+    // Bỏ qua 13 bài đã xuất hiện ở các phần trên (1 p12 + 12 bài others)
+    $remainingNews = $others->slice(12);
+
+    $perPage = 10;
+    $currentPage = request()->input('page', 1);
+    $pagedNews = $remainingNews->forPage($currentPage, $perPage);
+    $totalPages = ceil($remainingNews->count() / $perPage);
     @endphp
+
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Tin tức mới nhất') }}
+        </h2>
+    </x-slot>
 
     <div class="bg-[#121212] min-h-screen text-white py-12 font-vietnam" x-data="{ 
             activeNews: 1, 
@@ -175,6 +186,69 @@
 
                 </div>
             </div>
+
+            <div class="border-t border-gray-800 mt-24 pt-16 mb-12">
+                <h2 class="text-2xl font-bold mb-10 uppercase tracking-widest text-white">Tất cả tin tức</h2>
+
+                <div class="flex flex-col gap-8">
+                    @foreach($pagedNews as $item)
+                    <a href="{{ route('news.show', $item['id']) }}"
+                        class="group flex flex-col md:flex-row gap-8 items-center bg-[#1a1a1a]/30 p-6 rounded-3xl hover:bg-[#1a1a1a]/80 transition duration-300">
+                        <div class="w-full md:w-64 h-40 flex-shrink-0 overflow-hidden rounded-2xl">
+                            <img src="{{ asset($item['thumbnail']) }}"
+                                class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="flex-1">
+                            <span
+                                class="text-blue-400 text-xs font-bold uppercase mb-2 block tracking-widest">{{ $item['tags'][0] ?? 'Tin tức' }}</span>
+                            <h3 class="text-white text-xl font-bold mb-3 group-hover:text-blue-300 transition">
+                                {{ $item['title'] }}
+                            </h3>
+                            <p class="text-gray-400 text-sm line-clamp-2 leading-relaxed mb-4">{{ $item['summary'] }}
+                            </p>
+                            <div class="text-gray-500 text-xs font-medium uppercase italic">Tác giả:
+                                {{ $item['author'] }}
+                            </div>
+                        </div>
+                    </a>
+                    @endforeach
+                </div>
+
+                {{-- THANH PHÂN TRANG (PAGINATION) --}}
+                @if($totalPages > 1)
+                <div class="flex justify-center items-center gap-4 mt-16">
+                    {{-- Nút Trở về --}}
+                    @if($currentPage > 1)
+                    <a href="?page={{ $currentPage - 1 }}"
+                        class="p-3 rounded-xl bg-[#1a1a1a] hover:bg-blue-600 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </a>
+                    @endif
+
+                    {{-- Số trang --}}
+                    <div class="flex gap-2">
+                        @for($i = 1; $i <= $totalPages; $i++) <a href="?page={{ $i }}"
+                            class="w-12 h-12 flex items-center justify-center rounded-xl font-bold transition {{ $currentPage == $i ? 'bg-blue-600 text-white' : 'bg-[#1a1a1a] text-gray-400 hover:bg-gray-700' }}">
+                            {{ $i }}
+                            </a>
+                            @endfor
+                    </div>
+
+                    {{-- Nút Tiếp theo --}}
+                    @if($currentPage < $totalPages) <a href="?page={{ $currentPage + 1 }}"
+                        class="p-3 rounded-xl bg-[#1a1a1a] hover:bg-blue-600 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                        </a>
+                        @endif
+                </div>
+                @endif
+            </div>
+
+
         </div>
     </div>
 </x-app-layout>

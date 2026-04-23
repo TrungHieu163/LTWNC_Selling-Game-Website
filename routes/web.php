@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/checkout-view', [OrderController::class, 'checkoutView'])->name('checkout.view');
     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    //Route::post('/payos-webhook', [OrderController::class, 'handlePayOSWebhook']);
 
     Route::get('/api/my-orders', [OrderController::class, 'myOrders']);
     Route::get('/api/my-orders/{id}', [OrderController::class, 'showOrder']);
@@ -48,7 +49,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/my-orders/{id}/{game_id?}', [OrderController::class, 'showOrderView'])->name('keys');
 
     Route::get('/library', [OrderController::class, 'myLibraryView'])->name('library');
-
 });
 
 Route::get('/api/games', [GameController::class, 'index']);
@@ -57,6 +57,6 @@ Route::get('/api/games/{id}', [GameController::class, 'show']);
 Route::get('/games/{id}', [GameController::class, 'showView'])->name('games.show');
 
 Route::post('/payos-webhook', [OrderController::class, 'handlePayOSWebhook'])
-    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class, 'web', 'auth', 'csrf']);
+     ->withoutMiddleware(['web', 'auth', 'csrf']);
 
 require __DIR__ . '/auth.php';

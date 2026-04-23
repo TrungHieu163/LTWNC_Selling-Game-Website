@@ -5,10 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\NewsController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [GameController::class, 'homeView'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -16,7 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         if (auth()->user()->hasRole('admin')) {
             return redirect()->intended('/admin');
         }
-        return view('dashboard');
+        return app(GameController::class)->homeView();
     })->name('dashboard');
 
     Route::get('/search', [GameController::class, 'searchView'])->name('search');
@@ -24,13 +23,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/giohang', [CartController::class, 'index'])->name('giohang');
 
-    Route::get('/tin-tuc', function () {
-        return view('news.index');
-    })->name('news.index');
 
-    Route::get('/tin-tuc/chi-tiet', function () {
-        return view('news.show');
-    })->name('news.show');
+    Route::prefix('tin-tuc')->group(function () {
+        Route::get('/', [NewsController::class, 'index'])->name('news.index');
+        Route::get('/{id}', [NewsController::class, 'show'])->name('news.show');
+    });
+
 
     Route::get('/inventory', [GameController::class, 'indexView'])->name('inventory');
 

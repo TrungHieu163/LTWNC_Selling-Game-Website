@@ -43,11 +43,11 @@
                     <div x-data="{ activeMedia: '{{ $game->trailer_url ? 'video' : 'image1' }}' }" class="space-y-6">
                         <div class="aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
                             @if($game->trailer_url)
-                                <template x-if="activeMedia === 'video'">
+                            <template x-if="activeMedia === 'video'">
                                     <iframe class="w-full h-full" 
                                             src="https://www.youtube.com/embed/{{$game->youtube_id}}"
-                                            frameborder="0" allowfullscreen></iframe>
-                                </template>
+                                    frameborder="0" allowfullscreen></iframe>
+                            </template>
                             @endif
                             <template x-if="activeMedia === 'image1'">
                                 <img src="{{ Storage::url($game->image) }}" class="w-full h-full object-cover">
@@ -56,11 +56,11 @@
 
                         <div class="flex justify-center items-center gap-4 py-2 border-t border-gray-800">
                             @if($game->trailer_url)
-                                <button @click="activeMedia = 'video'"
-                                    class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition flex items-center justify-center overflow-hidden hover:scale-105"
-                                    :class="activeMedia === 'video' ? 'border-blue-500' : 'border-gray-700'">
-                                    <span class="text-xs text-white font-bold uppercase tracking-wider">Trailer</span>
-                                </button>
+                            <button @click="activeMedia = 'video'"
+                                class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition flex items-center justify-center overflow-hidden hover:scale-105"
+                                :class="activeMedia === 'video' ? 'border-blue-500' : 'border-gray-700'">
+                                <span class="text-xs text-white font-bold uppercase tracking-wider">Trailer</span>
+                            </button>
                             @endif
 
                             <button @click="activeMedia = 'image1'"
@@ -86,10 +86,10 @@
                             <span class="text-gray-500 text-sm block mb-3 font-bold uppercase tracking-widest italic">Thể loại</span>
                             <div class="flex flex-wrap gap-4 font-medium text-sm">
                                 @foreach($game->categories as $category)
-                                    <a href="{{ route('search', ['category_id' => $category->id]) }}"
-                                       class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">
-                                        {{ $category->name }}
-                                    </a>
+                                <a href="{{ route('search', ['category_id' => $category->id]) }}"
+                                    class="text-white hover:text-blue-400 transition underline decoration-gray-700 underline-offset-4">
+                                    {{ $category->name }}
+                                </a>
                                 @endforeach
                             </div>
                         </div>
@@ -145,9 +145,9 @@
 
                         <div class="text-3xl font-black text-white mb-8">
                             @if($game->price > 0)
-                                {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                            {{ number_format($game->price, 0, ',', '.') }} VNĐ
                             @else
-                                <span class="text-green-500 uppercase tracking-wider">Miễn phí</span>
+                            <span class="text-green-500 uppercase tracking-wider">Miễn phí</span>
                             @endif
                         </div>
 
@@ -163,8 +163,8 @@
                             </form>
 
                             {{-- Nút thêm vào giỏ hàng qua AJAX/Dispatch --}}
-                            <form action="{{ route('cart.add', $game->id) }}" method="POST" 
-                                  @submit.prevent="fetch($el.action, { method: 'POST', body: new FormData($el), headers: { 'X-Requested-With': 'XMLHttpRequest' } }).then(() => $dispatch('add-to-cart'))">
+                            <form action="{{ route('cart.add', $game->id) }}" method="POST"
+                                @submit.prevent="fetch($el.action, { method: 'POST', body: new FormData($el), headers: { 'X-Requested-With': 'XMLHttpRequest' } }).then(() => $dispatch('add-to-cart'))">
                                 @csrf
                                 <button type="submit"
                                     class="w-full text-white border border-gray-700 hover:bg-gray-800 font-bold py-4 px-4 rounded transition uppercase text-xs tracking-widest flex items-center justify-center gap-3 group active:scale-95">

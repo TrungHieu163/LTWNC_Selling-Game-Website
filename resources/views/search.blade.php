@@ -8,7 +8,7 @@
     <div class="py-12 bg-[#121212] min-h-screen text-white" 
         x-data="{ 
             searchQuery: '{{ request('search') }}', 
-            isSearched: {{ request()->hasAny(['search', 'category_id']) ? 'true' : 'false' }},
+            isSearched: {{ request()->hasAny(['search', 'category_id', 'price']) ? 'true' : 'false' }},
             showDropdown: false,
             suggestions: [],
             async fetchSuggestions() {
@@ -97,6 +97,8 @@
                             Kết quả tìm kiếm: "{{ request('search') }}"
                         @elseif(request('category_id'))
                             Thể loại: {{ $categories->find(request('category_id'))->name ?? 'Không xác định' }}
+                        @elseif(request()->query('price') === '0')
+                            Trò chơi miễn phí
                         @endif
                     </h2>
                     <a href="{{ route('search') }}" class="text-gray-500 hover:text-white text-sm font-bold uppercase transition">

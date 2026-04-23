@@ -6,9 +6,9 @@
 
 | STT | Họ và tên             | MSSV        | Vai trò dự kiến              |
 | :-- | :-------------------- | :---------- | :--------------------------- |
-| 1   | **Nguyễn Trung Hiếu** | 23810310387 | Nhóm trưởng (Lead/Backend)   |
-| 2   | Nguyễn Trọng Phúc     | 23810310391 | Thành viên (Fullstack/Admin) |
-| 3   | Nguyễn Hữu Thành      | 23810310389 | Thành viên (Frontend/UI-UX)  |
+| 1   | **Nguyễn Trung Hiếu** | 23810310387 | Nhóm trưởng (Backend)   |
+| 2   | Nguyễn Trọng Phúc     | 23810310391 | Thành viên (Admin) |
+| 3   | Nguyễn Hữu Thành      | 23810310389 | Thành viên (Frontend)  |
 
 ---
 
@@ -22,7 +22,7 @@
 | **Authorization**  | **Spatie Laravel Permission** (Phân quyền Role/Permission) |
 | **Frontend**       | Blade Engine, Tailwind CSS, JavaScript                     |
 | **Database**       | MySQL                                                      |
-| **Payment**        | **VNPay API** (Cổng thanh toán điện tử chính)              |
+| **Payment**        | **PayOS API** (Cổng thanh toán điện tử chính)              |
 
 ---
 
@@ -32,15 +32,15 @@ Tất cả tài liệu SRS được lưu trong tập tin `SRS.md`.
 
 | Mã | Tên Chức Năng | Tài Liệu | Trạng Thái |
 | :--- | :--- | :--- | :--- |
-| AUTH-01 | Xác thực & Phân quyền | SRS.md | Đang thực hiện |
-| AUTH-02 | Đăng ký tài khoản | SRS.md | Đang thực hiện |
-| GAME-01 | Xem danh sách game | SRS.md | Đang thực hiện |
-| GAME-02 | Tìm kiếm game | SRS.md | Đang thực hiện |
-| CART-01 | Quản lý giỏ hàng | SRS.md | Đang thực hiện |
-| ORDER-01 | Đặt hàng & Thanh toán | SRS.md | Đang thực hiện |
-| USER-01 | Quản lý tài khoản cá nhân | SRS.md | Đang thực hiện |
-| ADMIN-01 | Quản trị người dùng | SRS.md | Đang thực hiện |
-| ADMIN-02 | Quản trị hệ thống Game | SRS.md | Đang thực hiện |
+| AUTH-01 | Xác thực & Phân quyền | SRS.md | Hoàn thành |
+| AUTH-02 | Đăng ký tài khoản | SRS.md | Hoàn thành |
+| GAME-01 | Xem danh sách game | SRS.md | Hoàn thành |
+| GAME-02 | Tìm kiếm game | SRS.md | Hoàn thành |
+| CART-01 | Quản lý giỏ hàng | SRS.md | Hoàn thành |
+| ORDER-01 | Đặt hàng & Thanh toán | SRS.md | Hoàn thành |
+| USER-01 | Quản lý tài khoản cá nhân | SRS.md | Hoàn thành |
+| ADMIN-01 | Quản trị người dùng | SRS.md | Hoàn thành |
+| ADMIN-02 | Quản trị hệ thống Game | SRS.md | Hoàn thành |
 | ADMIN-03 | Thống kê & Báo cáo | SRS.md | Đang thực hiện |
 
 ---

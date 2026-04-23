@@ -45,12 +45,12 @@
                             @if($game->trailer_url)
                                 <template x-if="activeMedia === 'video'">
                                     <iframe class="w-full h-full" 
-                                            src="https://www.youtube.com/embed/{{ Str::afterLast($game->trailer_url, '=') }}"
+                                            src="https://www.youtube.com/embed/{{$game->youtube_id}}"
                                             frameborder="0" allowfullscreen></iframe>
                                 </template>
                             @endif
                             <template x-if="activeMedia === 'image1'">
-                                <img src="{{ asset('images/' . $game->image) }}" class="w-full h-full object-cover">
+                                <img src="{{ Storage::url($game->image) }}" class="w-full h-full object-cover">
                             </template>
                         </div>
 
@@ -66,7 +66,7 @@
                             <button @click="activeMedia = 'image1'"
                                 class="w-32 aspect-video bg-gray-900/80 rounded flex-shrink-0 border-2 transition overflow-hidden hover:scale-105"
                                 :class="activeMedia === 'image1' ? 'border-blue-500' : 'border-gray-700'">
-                                <img src="{{ asset('images/' . $game->image) }}" class="w-full h-full object-cover">
+                                <img src="{{ Storage::url($game->image) }}" class="w-full h-full object-cover">
                             </button>
                         </div>
                     </div>
@@ -144,7 +144,11 @@
                         </div>
 
                         <div class="text-3xl font-black text-white mb-8">
-                            {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                            @if($game->price > 0)
+                                {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                            @else
+                                <span class="text-green-500 uppercase tracking-wider">Miễn phí</span>
+                            @endif
                         </div>
 
                         <div class="space-y-4">
@@ -183,7 +187,7 @@
                             </div>
                             <div class="flex justify-between text-[13px]">
                                 <span class="text-gray-500 font-medium italic">Ngày phát hành</span>
-                                <span class="text-white font-bold italic">{{ $game->description['released_at'] ?? $game->created_at->format('d/m/Y') }}</span>                            
+                                <span class="text-white font-bold italic">{{ isset($game->description['released_at']) ? \Carbon\Carbon::parse($game->description['released_at'])->format('d/m/Y') : $game->created_at->format('d/m/Y')}}</span>                            
                             </div>
                         </div>
                     </div>

@@ -48,10 +48,13 @@
                             <div class="p-2">
                                 <template x-for="game in suggestions" :key="game.id">
                                     <a :href="'/games/' + game.id" class="flex items-center gap-4 p-2 hover:bg-[#303030] rounded transition group">
-                                        <img :src="'/storage/' + game.image" class="w-10 h-12 object-cover rounded" onerror="this.src='https://via.placeholder.com/40x50'">
+                                        <img :src="'/storage/' + game.image" class="w-16 aspect-video object-cover rounded" onerror="this.src='https://via.placeholder.com/40x50'">
                                         <div>
                                             <div class="text-sm font-bold group-hover:text-blue-500" x-text="game.name"></div>
-                                            <div class="text-xs text-gray-400" x-text="new Intl.NumberFormat().format(game.price) + ' VNĐ'"></div>
+                                            <div class="text-xs" 
+                                                :class="game.price > 0 ? 'text-gray-400' : 'text-green-500 font-bold'"
+                                                x-text="game.price > 0 ? new Intl.NumberFormat().format(game.price) + ' VNĐ' : 'MIỄN PHÍ'">
+                                            </div>
                                         </div>
                                     </a>
                                 </template>
@@ -113,13 +116,19 @@
                     @forelse ($games as $game)
                     <div class="group cursor-pointer">
                         <a href="{{ route('games.show', $game->id) }}">
-                            <div class="aspect-[3/4] overflow-hidden rounded-lg mb-3">
-                                <img src="{{ asset('storage/' . $game->image) }}"
+                            <div class="aspect-video overflow-hidden rounded-lg mb-3">
+                                <img src="{{ Storage::url($game->image) }}"
                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                                     onerror="this.src='https://via.placeholder.com/300x400'">
                             </div>
                             <h4 class="font-bold text-gray-200 group-hover:text-blue-500 transition line-clamp-1">{{ $game->name }}</h4>
-                            <p class="text-white mt-1">{{ number_format($game->price) }} VNĐ</p>
+                            <p class="text-white mt-1">
+                                @if($game->price > 0)
+                                    {{ number_format($game->price) }} VNĐ
+                                @else
+                                    <span class="text-green-500 font-bold uppercase text-sm">Miễn phí</span>
+                                @endif
+                            </p>
                         </a>
                     </div>
                     @empty

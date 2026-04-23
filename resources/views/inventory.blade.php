@@ -13,9 +13,9 @@
                 @foreach($games as $game)
                 <div class="group">
                     <a href="{{ route('games.show', $game->id) }}" class="block">
-                        <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-[#1a1a1a] mb-4 shadow-lg transition duration-300 group-hover:shadow-blue-900/40 border border-gray-800 group-hover:border-blue-500">
+                        <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-[#1a1a1a] mb-4 shadow-lg transition duration-300 group-hover:shadow-blue-900/40 border border-gray-800 group-hover:border-blue-500 aspect-video">
                             {{-- Hiển thị ảnh từ storage --}}
-                            <img src="{{ asset('storage/' . $game->image) }}"
+                            <img src="{{ Storage::url($game->image) }}"
                                 class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
                                 onerror="this.src='https://via.placeholder.com/450x600?text=No+Image'">
                             
@@ -33,7 +33,11 @@
                             </p>
                             <div class="mt-3 flex items-center justify-between">
                                 <span class="text-white font-black text-base">
-                                    {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                                    @if($game->price > 0)
+                                        {{ number_format($game->price, 0, ',', '.') }} VNĐ
+                                    @else
+                                        <span class="text-green-500 uppercase">Miễn phí</span>
+                                    @endif
                                 </span>
                             </div>
                         </div>

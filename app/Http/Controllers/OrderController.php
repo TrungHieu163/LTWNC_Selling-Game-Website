@@ -7,6 +7,9 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Game;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use PayOS\PayOS;
 
 class OrderController extends Controller
 {
@@ -20,87 +23,116 @@ class OrderController extends Controller
 
         $user = auth()->user();
 
-        return DB::transaction(function () use ($cart, $user) {
-
-            $order = Order::create([
-                'user_id' => $user->id,
-                'total_price' => 0,
-                'status' => 'pending'
-            ]);
-
-            $total = 0;
-            $allKeys = [];
-
-            foreach ($cart as $gameId => $details) {
-                $game = Game::findOrFail($gameId);
-
-                // Lấy số lượng từ mảng details (nếu không có thì mặc định là 1)
-                $qty = is_array($details) ? ($details['quantity'] ?? 1) : $details;
-
-                // Kiểm tra có đủ key chưa bán không
-                $availableCount = $game->availableKeys()->count();
-
-                if ($availableCount < $qty) {
-                    // Sửa lỗi Array to string conversion ở đây bằng cách dùng biến $qty đã xử lý
-                    throw new \Exception("Game " . $game->name . " chỉ còn " . $availableCount . " key. Bạn yêu cầu " . $qty . ".");
-                }
-
-                // Tạo OrderItem
-                $orderItem = OrderItem::create([
-                    'order_id' => $order->id,
-                    'game_id' => $gameId,
-                    'quantity' => $qty,
-                    'price' => $game->price,
+        try {
+            // 1. Lưu đơn hàng vào Database
+            $result = DB::transaction(function () use ($cart, $user) {
+                $order = Order::create([
+                    'user_id'     => $user->id,
+                    'total_price' => 0,
+                    'status'      => 'pending'
                 ]);
 
-                // Lấy và mark key là đã bán
-                $keys = $game->availableKeys()
-                             ->limit($qty)
-                             ->get();
+                $total = 0;
+                $payosItems = [];
 
-                foreach ($keys as $key) {
-                    $key->update(['is_sold' => true]);
-                    
-                    $order->gameKeys()->attach($key->id);
+                foreach ($cart as $gameId => $details) {
+                    $game = Game::findOrFail($gameId);
+                    $qty  = is_array($details) ? ($details['quantity'] ?? 1) : $details;
 
-                    $allKeys[] = [                 
-                        'game_name' => $game->name,
-                        'key_code'  => $key->key_code,
-                        'key_id'    => $key->id
+                    if ($game->availableKeys()->count() < $qty) {
+                        throw new \Exception("Game {$game->name} chỉ còn {$game->availableKeys()->count()} key.");
+                    }
+
+                    OrderItem::create([
+                        'order_id' => $order->id,
+                        'game_id'  => $gameId,
+                        'quantity' => $qty,
+                        'price'    => $game->price,
+                    ]);
+
+                    $total += $game->price * $qty;
+
+                    $payosItems[] = [
+                        'name'     => $game->name,
+                        'quantity' => (int) $qty,
+                        'price'    => (int) $game->price,
                     ];
                 }
 
-                $total += $game->price * $qty;
+                $order->update(['total_price' => $total]);
+                return ['order' => $order, 'payosItems' => $payosItems, 'total' => $total];
+            });
+
+            $order = $result['order'];
+            $payosItems = $result['payosItems'];
+            $total = $result['total'];
+
+            // 2. XỬ LÝ GAME MIỄN PHÍ
+            if ($total <= 0) {
+                DB::transaction(function () use ($order) {
+                    $order->load('items.game');
+
+                    foreach ($order->items as $item) {
+                        $game = $item->game;
+                        // Lấy key cho game miễn phí và đánh dấu đã bán
+                        $keys = $game->availableKeys()->limit($item->quantity)->get();
+
+                        foreach ($keys as $key) {
+                            $key->update(['is_sold' => true]);
+                            $order->gameKeys()->attach($key->id);
+                        }
+                    }
+
+                    // Hoàn tất đơn hàng ngay lập tức
+                    $order->update(['status' => 'completed']);
+                });
+
+                session()->forget('cart');
+
+                return response()->json([
+                    'success' => true,
+                    'is_free' => true,
+                    'message' => 'Game miễn phí đã được thêm vào thư viện của bạn!',
+                    'redirectUrl' => route('library') 
+                ]);
             }
 
-            $order->update([
-                'total_price' => $total,
-                'status' => 'completed'
-            ]);
+            // 3. XỬ LÝ THANH TOÁN QUA PAYOS (Nếu số tiền > 0)
+            $payOS = new PayOS(
+                config('payos.client_id'),
+                config('payos.api_key'),
+                config('payos.checksum_key')
+            );
 
-            // Xóa giỏ hàng
-            session()->forget('cart');
+            $data = [
+                'orderCode'   => intval($order->id),
+                'amount'      => intval($total),
+                'description' => 'Thanh toan don hang #' . $order->id,
+                'items'       => $payosItems,
+                'returnUrl'   => config('payos.return_url'),
+                'cancelUrl'   => config('payos.cancel_url'),
+                'buyerName'   => $user->name ?? 'Khach hang',
+                'buyerEmail'  => $user->email ?? '',
+                'buyerPhone'  => '0363636363',
+            ];
 
-            // Load relation để trả về đầy đủ
-            $order->load(['items.game']);
+            $response = $payOS->createPaymentLink($data);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Đặt hàng thành công! Dưới đây là mã kích hoạt game của bạn.',
-                'order_id' => $order->id,
-                'total'    => $total,
-                'status'   => 'completed',
-                'items' => $order->items->map(function ($item) {
-                    return [
-                        'game_name' => $item->game->name,
-                        'quantity'  => $item->quantity,
-                        'price'     => $item->price,
-                        'subtotal'  => $item->price * $item->quantity,
-                    ];
-                }),
-                'keys' => $allKeys,
-            ]);
-        });
+            if (isset($response['checkoutUrl'])) {
+                session()->forget('cart');
+                return response()->json([
+                    'success' => true,
+                    'is_free' => false,
+                    'checkoutUrl' => $response['checkoutUrl']
+                ]);
+            }
+
+            return response()->json(['success' => false, 'error' => 'Lỗi tạo link thanh toán'], 400);
+
+        } catch (\Exception $e) {
+            Log::error('Checkout Error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 400);
+        }
     }
 
     public function myOrders()
@@ -193,30 +225,93 @@ class OrderController extends Controller
     }
 
     public function showOrderView($id, $game_id = null)
-{
-    // Nếu có game_id, mình sẽ lấy TẤT CẢ các key của game đó mà User này sở hữu
-    if ($game_id) {
-        $gameKeys = \App\Models\GameKey::where('game_id', $game_id)
-            ->whereHas('order', function($q) {
-                $q->where('user_id', auth()->id());
-            })
-            ->with('game')
-            ->latest()
-            ->get();
+    {
+        // Nếu có game_id, mình sẽ lấy TẤT CẢ các key của game đó mà User này sở hữu
+        if ($game_id) {
+            $gameKeys = \App\Models\GameKey::where('game_id', $game_id)
+                ->whereHas('order', function($q) {
+                    $q->where('user_id', auth()->id());
+                })
+                ->with('game')
+                ->latest()
+                ->get();
 
-        // Tạo một object giả lập để không phải sửa giao diện Blade nhiều
-        $order = (object)[
-            'id' => 'Tất cả đơn hàng',
-            'created_at' => now(),
-            'gameKeys' => $gameKeys
-        ];
-    } else {
-        // Nếu không có game_id, vẫn hiện theo từng đơn hàng như cũ
-        $order = Order::where('user_id', auth()->id())
-                      ->with('gameKeys.game')
-                      ->findOrFail($id);
+            // Tạo một object giả lập để không phải sửa giao diện Blade nhiều
+            $order = (object)[
+                'id' => 'Tất cả đơn hàng',
+                'created_at' => now(),
+                'gameKeys' => $gameKeys
+            ];
+        } else {
+            // Nếu không có game_id, vẫn hiện theo từng đơn hàng như cũ
+            $order = Order::where('user_id', auth()->id())
+                        ->with('gameKeys.game')
+                        ->findOrFail($id);
+        }
+
+        return view('keys', compact('order'));
     }
 
-    return view('keys', compact('order'));
-}  
+    public function handlePayOSWebhook(Request $request)
+    {
+        $payload = $request->all();
+        Log::info('PayOS Webhook received:', $payload);
+
+        try {
+            $payOS = new PayOS(
+                config('payos.client_id'),
+                config('payos.api_key'),
+                config('payos.checksum_key')
+            );
+
+            // Xác thực chữ ký bằng SDK
+            $webhookData = $payOS->verifyPaymentWebhookData($payload);
+
+            // Xử lý khi thanh toán thành công (mã 00)
+            if ($payload['code'] === '00') {
+                $orderCode = $webhookData['orderCode'];
+
+                DB::transaction(function () use ($orderCode) {
+                    $order = Order::with('items.game')->find($orderCode);
+
+                    if ($order && $order->status !== 'completed') {
+                        foreach ($order->items as $item) {
+                            $game = $item->game;
+                            $keys = $game->availableKeys()->limit($item->quantity)->get();
+
+                            foreach ($keys as $key) {
+                                $key->update(['is_sold' => true]);
+                                $order->gameKeys()->attach($key->id);
+                            }
+                        }
+
+                        $order->update(['status' => 'completed']);
+                        Log::info("Đơn hàng #{$orderCode} đã hoàn tất.");
+                    }
+                });
+            }
+
+            return response()->json(['success' => true], 200);
+
+        } catch (\Exception $e) {
+            Log::error('PayOS Webhook Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Invalid signature or data'], 401);
+        }
+    }
+
+    public function checkoutView()
+    {
+        $cart = session('cart', []);
+        $total = 0;
+
+        foreach ($cart as $id => $details) {
+            $game = \App\Models\Game::find($id);
+            if ($game) {
+                $qty = is_array($details) ? ($details['quantity'] ?? 1) : $details;
+                $total += $game->price * $qty;
+            }
+        }
+
+        return view('checkout', compact('total'));
+    }
 }

@@ -27,9 +27,9 @@
                             @endphp
                             
                             <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 flex items-center gap-6 group hover:bg-[#202020] transition">
-                                <div class="w-24 h-32 flex-shrink-0 overflow-hidden rounded shadow-md">
-                                    <img src="{{ asset('storage/' . ($details['image'] ?? '')) }}"
-                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                <div class="w-48 aspect-video flex-shrink-0 overflow-hidden rounded-lg shadow-md border border-gray-800">
+                                    <img src="{{ asset(Storage::url($details['image'] ?? '')) }}"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500 "
                                          onerror="this.src='https://via.placeholder.com/150x200'">
                                 </div>
 
@@ -45,8 +45,14 @@
                                             </p>
                                         </div>
                                         <div class="text-right">
-                                            <div class="text-lg font-bold text-white">{{ number_format($price) }} VNĐ</div>
-                                            @if($qty > 1)
+                                            <div class="text-lg font-bold text-white">
+                                                @if($price > 0)
+                                                    {{ number_format($price) }} VNĐ
+                                                @else
+                                                    <span class="text-green-500">Miễn phí</span>
+                                                @endif
+                                            </div>
+                                            @if($qty > 1 && $price > 0)
                                                 <div class="text-xs text-blue-400 font-semibold mt-1">
                                                     Thành tiền: {{ number_format($subtotal) }} VNĐ
                                                 </div>
@@ -77,23 +83,22 @@
                                 <span>Tạm tính</span>
                                 <span>{{ number_format($totalPrice) }} VNĐ</span>
                             </div>
-                            <div class="flex justify-between text-gray-400">
-                                <span>Giảm giá</span>
-                                <span>0 VNĐ</span>
-                            </div>
                         </div>
 
                         <div class="flex justify-between text-xl font-extrabold my-6">
                             <span>Tổng cộng</span>
-                            <span class="text-blue-500">{{ number_format($totalPrice) }} VNĐ</span>
+                            <span class="text-blue-500">
+                                @if($totalPrice > 0)
+                                    {{ number_format($totalPrice) }} VNĐ
+                                @else
+                                    Miễn phí
+                                @endif
+                            </span>
                         </div>
 
-                        <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-4 rounded transition uppercase tracking-widest shadow-lg">
-                                Thanh toán ngay
-                            </button>
-                        </form>
+                        <a href="{{ route('checkout.view') }}" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-4 rounded transition uppercase tracking-widest shadow-lg">
+                            Thanh toán
+                        </a>
                         
                         <p class="text-[10px] text-gray-500 mt-4 text-center italic">
                             * Mã kích hoạt sẽ được hiển thị ngay sau khi thanh toán thành công.

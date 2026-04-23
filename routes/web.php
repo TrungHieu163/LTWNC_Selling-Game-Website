@@ -38,11 +38,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
+    Route::get('/checkout-view', [OrderController::class, 'checkoutView'])->name('checkout.view');
     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    //Route::post('/payos-webhook', [OrderController::class, 'handlePayOSWebhook']);
 
     Route::get('/api/my-orders', [OrderController::class, 'myOrders']);
     Route::get('/api/my-orders/{id}', [OrderController::class, 'showOrder']);
@@ -56,5 +57,8 @@ Route::get('/api/games', [GameController::class, 'index']);
 Route::get('/api/games/{id}', [GameController::class, 'show']);
 
 Route::get('/games/{id}', [GameController::class, 'showView'])->name('games.show');
+
+Route::post('/payos-webhook', [OrderController::class, 'handlePayOSWebhook'])
+     ->withoutMiddleware(['web', 'auth', 'csrf']);
 
 require __DIR__ . '/auth.php';

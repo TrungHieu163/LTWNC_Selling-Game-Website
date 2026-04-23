@@ -80,6 +80,8 @@ class GameForm
                 FileUpload::make('image')
                     ->label('Hình ảnh')
                     ->image()
+                    ->disk('public') // Lưu vào storage/app/public
+                    ->directory('images')
                     ->columnSpan(1),
 
                 TextInput::make('trailer_url')

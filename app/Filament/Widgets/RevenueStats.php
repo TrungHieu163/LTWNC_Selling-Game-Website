@@ -10,7 +10,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class RevenueStats extends BaseWidget
 {
     protected int | string | array $columnSpan = 1;
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
     protected function getColumns(): int
     {
         return 1;

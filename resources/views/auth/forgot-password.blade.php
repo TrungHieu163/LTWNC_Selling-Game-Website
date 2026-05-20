@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Quên mật khẩu à? No bờ ro bờ lèm. Hãy cho chúng tôi biết địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết đặt lại mật khẩu.') }}
+        {{ __('Quên mật khẩu à? No bờ ro bờ lèm. Hãy cho chúng tôi biết địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một email đặt lại mật khẩu.') }}
     </div>
 
     <!-- Session Status -->
@@ -19,7 +19,7 @@
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button>
-                {{ __('Link đặt lại mật khẩu qua email') }}
+                {{ __('Đặt lại mật khẩu qua email') }}
             </x-primary-button>
         </div>
     </form>

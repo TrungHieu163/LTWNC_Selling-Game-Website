@@ -33,9 +33,31 @@
                     </x-nav-link>
 
                     <x-nav-link :href="route('giohang')" :active="request()->routeIs('giohang')">
-                        {{ __('Giỏ hàng') }}
-                    </x-nav-link>
+                        <div class="flex items-center gap-2 py-2"> {{-- Thêm py-2 để tạo khoảng trống phía trên không bị cấn viền Navbar --}}
+                            {{-- Bọc ĐỘC LẬP Icon và Badge số lượng vào đây --}}
+                            <div class="relative flex items-center justify-center w-8 h-8">
+                                {{-- Icon giỏ hàng --}}
+                                <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 2m2-2h10m0 0l2 2M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z" />
+                                </svg>
 
+                                @php
+                                    $cart = session('cart', []);
+                                    // Logic tính tổng số lượng key game
+                                    $cartCount = array_sum(array_column($cart, 'quantity')); 
+                                @endphp
+
+                                @if($cartCount > 0)
+                                    <span class="absolute top-0 right-0 bg-red-600 text-white text-[9px] font-bold rounded-full h-4 min-w-[16px] px-1 flex items-center justify-center transform translate-x-1 -translate-y-1 z-10">
+                                        {{ $cartCount }}
+                                    </span>
+                                @endif
+                            </div>
+
+                            <span class="text-sm font-medium text-gray-300">Giỏ hàng</span>
+                        </div>
+                    </x-nav-link>
                 </div>
             </div>
 

@@ -41,7 +41,7 @@ Tất cả tài liệu SRS được lưu trong tập tin `SRS.md`.
 | USER-01 | Quản lý tài khoản cá nhân | SRS.md | Hoàn thành |
 | ADMIN-01 | Quản trị người dùng | SRS.md | Hoàn thành |
 | ADMIN-02 | Quản trị hệ thống Game | SRS.md | Hoàn thành |
-| ADMIN-03 | Thống kê & Báo cáo | SRS.md | Đang thực hiện |
+| ADMIN-03 | Thống kê & Báo cáo | SRS.md | Hoàn thành |
 
 ---
 

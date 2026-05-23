@@ -17,6 +17,19 @@ class CartController extends Controller
             return back()->with('error', 'Xin lỗi, Game ' . $game->name . ' hiện đã hết mã kích hoạt!');
         }
 
+        // Nếu người dùng bấm "Mua ngay" và sản phẩm ĐÃ CÓ trong giỏ hàng rồi
+        if ($request->has('buy_now') && isset($cart[$id])) {
+            // Kiểm tra nếu số lượng trong giỏ đã đạt tối đa trong kho, chuyển thẳng ra trang giỏ hàng luôn
+            if ($cart[$id]['quantity'] >= $availableCount) {
+                return redirect()->route('giohang');
+            }
+            
+            // Nếu chưa đạt tối đa thì cộng thêm 1 rồi chuyển trang
+            $cart[$id]['quantity']++;
+            session()->put('cart', $cart);
+            return redirect()->route('giohang');
+        }
+
        // Nếu đã có trong giỏ, kiểm tra xem cộng thêm 1 có vượt quá số key đang có không
         if (isset($cart[$id])) {
             if ($cart[$id]['quantity'] + 1 > $availableCount) {
